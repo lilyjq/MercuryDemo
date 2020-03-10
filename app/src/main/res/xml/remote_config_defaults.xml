@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>welcome_messagea</key>
+        <value>local: Welcome to my awesome app!</value>
+    </entry>
+</defaultsMap>
