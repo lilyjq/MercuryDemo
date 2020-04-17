@@ -223,6 +223,7 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
         String status = Environment.getExternalStorageState();
         ContentValues contentValues = new ContentValues();
         //不能指定相对路径 Primary directory (invalid) not allowed for content://media/external/images/media; allowed directories are [DCIM, Pictures]
+        //只能指定已经存在的路径
 //        contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "/MercuryDemo/pic/");
         if (status.equals(Environment.MEDIA_MOUNTED)) {
             return getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);

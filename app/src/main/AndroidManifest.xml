@@ -35,6 +35,10 @@
 
         <activity android:name=".camera.AvatarActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".aty.TestLayoutActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".aty.RadarViewActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

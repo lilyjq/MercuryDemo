@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ProgressView" >
+        <attr name="p_color" format="color" />
+        <attr name="b_color" format="color"/>
+        <attr name="t_color" format="color"/>
+        <attr name="stokeWidth" format="dimension"/>
+    </declare-styleable>
+
+
+</resources>
