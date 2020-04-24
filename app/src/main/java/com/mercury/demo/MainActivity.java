@@ -10,6 +10,7 @@ import com.mercury.MainAdapter;
 import com.mercury.demo.aty.RadarViewActivity;
 import com.mercury.demo.aty.TestLayoutActivity;
 import com.mercury.demo.camera.AvatarActivity;
+import com.mercury.demo.viewpager.TestVPActivity;
 
 
 public class MainActivity extends AppCompatActivity implements MainAdapter.onItemClickListenr {
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
                 startActivity(new Intent(this, TestLayoutActivity.class));
                 break;
             case 2:
-                startActivity(new Intent(this, RadarViewActivity.class));
+                startActivity(new Intent(this, TestVPActivity.class));
             default:
                 break;
         }

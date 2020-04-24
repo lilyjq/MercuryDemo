@@ -6,10 +6,14 @@ import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.GridLayout;
 
 import com.mercury.demo.R;
 import com.mercury.demo.data.RaBean;
+import com.mercury.demo.util.DisplayUtil;
 
 import java.util.List;
 
@@ -25,6 +29,10 @@ public class RadarView extends View {
 
     CornerPathEffect effect;
     int max = 10;
+
+    int centerX ;
+    int centerY ;
+    int raduis;
 
 
 
@@ -50,8 +58,6 @@ public class RadarView extends View {
         paint.setAntiAlias(true);
         paint.setStrokeWidth(5);
 
-
-
         coverPaint = new Paint();
         coverPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         coverPaint.setColor(context.getResources().getColor(R.color.color_pink));
@@ -69,9 +75,22 @@ public class RadarView extends View {
         coverPaint.setPathEffect(effect);
         pointPaint.setPathEffect(effect);
     }
-    int centerX ;
-    int centerY ;
-    int raduis;
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        if(getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT && getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT){
+            setMeasuredDimension(DisplayUtil.sp2px(getContext(),220),DisplayUtil.sp2px(getContext(),220));
+        }else if(getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT){
+            setMeasuredDimension(DisplayUtil.sp2px(getContext(),220),heightSize);
+        }else if(getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT){
+            setMeasuredDimension(widthSize,DisplayUtil.sp2px(getContext(),220));
+        }
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -85,13 +104,9 @@ public class RadarView extends View {
          centerX = width/2;
          centerY = height/2;
          raduis = width>height? height/2-10 :width/2-10;
-
-//        canvas.drawPoint(100,100,pointPaint);
-
-
         for(int i = 1;i<lineSize+1;i++){
             int radui = raduis/lineSize*i;
-            drawMp(canvas,radui);
+            drawBase(canvas,radui);
         }
         if(list != null &&list.size()>4) {
             Path path = new Path();
@@ -111,10 +126,6 @@ public class RadarView extends View {
             path.close();
             canvas.drawPath(path, coverPaint);
         }
-
-
-
-
     }
 
     List<RaBean> list;
@@ -124,7 +135,10 @@ public class RadarView extends View {
     }
 
 
-    private void drawMp(Canvas canvas,int raduis){
+    /*
+    绘制底部的线条
+     */
+    private void drawBase(Canvas canvas,int raduis){
         Path path = new Path();
         paint.setPathEffect(effect);
         for(int i= 0;i<size;i++){
