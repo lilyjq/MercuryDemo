@@ -11,11 +11,11 @@ import com.mercury.demo.R;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class VPAdapter extends RecyclerView.Adapter<VPAdapter.VpViewholder> {
+public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.VpViewholder> {
 
     private Context context;
 
-    public VPAdapter(Context context) {
+    public ListItemAdapter(Context context) {
         this.context = context;
     }
 

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class TestVPFragment extends Fragment {
+public class RefreshListFragment extends Fragment {
 
 
 
@@ -46,6 +46,6 @@ public class TestVPFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.swipe_layout);
         recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new VPAdapter(getContext()));
+        recyclerView.setAdapter(new ListItemAdapter(getContext()));
     }
 }

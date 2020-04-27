@@ -3,21 +3,17 @@ package com.mercury.demo.viewpager;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
-public class VP2Adapter extends FragmentStateAdapter {
-
-
+public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     List<RefreshListFragment> list = new ArrayList<>();
 
-
-
-
-    public VP2Adapter(@NonNull Fragment fragment) {
-        super(fragment);
+    public ViewPagerAdapter(FragmentManager fm) {
+        super(fm);
         list.add(new RefreshListFragment());
         list.add(new RefreshListFragment());
         list.add(new RefreshListFragment());
@@ -27,18 +23,19 @@ public class VP2Adapter extends FragmentStateAdapter {
 
     }
 
-    @NonNull
     @Override
-    public Fragment createFragment(int position) {
+    public Fragment getItem(int position) {
         return list.get(position);
     }
 
     @Override
-    public int getItemCount() {
+    public int getCount() {
         return list.size();
     }
 
-
-
-
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return "233333";
+    }
 }

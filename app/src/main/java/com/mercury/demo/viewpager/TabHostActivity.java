@@ -1,6 +1,5 @@
 package com.mercury.demo.viewpager;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +13,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTabHost;
 
-public class TestVPActivity extends AppCompatActivity {
+public class TabHostActivity extends AppCompatActivity {
 
 
     FragmentTabHost tabHost;
     FrameLayout container;
 
-    private int[] imageRes = {R.drawable.bia,R.drawable.bianzu,R.drawable.yuyue};
+    private int[] imageRes = {R.drawable.tab_item_home,R.drawable.tab_item_hotle,R.drawable.tab_item_math};
     private String[] tags = {"111","222","333"};
-    private Class[] fragment ={ColorFragment.class,ColorPinkFragment.class,TestFragment.class};
+    private Class[] fragment ={ColorFragment.class,ColorPinkFragment.class, ViewpagerFragment.class};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

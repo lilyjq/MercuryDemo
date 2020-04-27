@@ -39,7 +39,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".aty.RadarViewActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".viewpager.TestVPActivity"
+        <activity android:name=".viewpager.TabHostActivity"
             android:screenOrientation="portrait"/>
     </application>
 
