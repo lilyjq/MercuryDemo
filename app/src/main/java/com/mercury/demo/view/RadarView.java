@@ -136,7 +136,6 @@ public class RadarView extends View {
 
     private void drawCover(Canvas canvas){
             Path path = new Path();
-
             for (int i = 0; i < size; i++) {
                 //弧长等于半径的弧,其所对的圆心角为1弧度，而一个圆的周长为2πr，其对应的弧度数为2πr/r=2π（即360°
                 //弧度和角度的换算关系如下：

@@ -42,18 +42,18 @@ public class RadarViewActivity extends Activity implements View.OnClickListener 
         list.add(new RaBean(4,"简直了"));
         list.add(new RaBean(5,"真厉害"));
         list.add(new RaBean(7,"233333"));
-        list.add(new RaBean(3,"大力出奇迹"));
+        list.add(new RaBean(8,"大力出奇迹"));
         list.add(new RaBean(6,"不可思议"));
         list.add(new RaBean(5,"奇奇怪怪"));
-        list.add(new RaBean(2,"可可爱爱"));
+        list.add(new RaBean(9,"可可爱爱"));
 
         datalist.add(new RaBean(4,"简直了"));
         datalist.add(new RaBean(5,"真厉害"));
         datalist.add(new RaBean(7,"233333"));
-        datalist.add(new RaBean(3,"大力出奇迹"));
+        datalist.add(new RaBean(8,"大力出奇迹"));
         datalist.add(new RaBean(6,"不可思议"));
         datalist.add(new RaBean(5,"奇奇怪怪"));
-        datalist.add(new RaBean(2,"可可爱爱"));
+        datalist.add(new RaBean(9,"可可爱爱"));
         radarView.setList(list);
 
     }
