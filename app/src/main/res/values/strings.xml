@@ -35,4 +35,7 @@
     <string name="tab5">自古</string>
     <string name="tab6">transformPivotX</string>
     <string name="tab7">千金裘</string>
+
+    <string name="data_plus">增加一个数据</string>
+    <string name="data_minus">减少一个数据</string>
 </resources>

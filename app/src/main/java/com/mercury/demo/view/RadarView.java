@@ -22,19 +22,19 @@ import androidx.annotation.Nullable;
 
 public class RadarView extends View {
 
-    Paint paint;
-    Paint pointPaint;
-    Paint coverPaint;
-    int size = 5;
-    int lineSize = 5;
+    private Paint paint;
+    private Paint pointPaint;
+    private Paint coverPaint;
+    private int size = 5;
+    private int lineSize = 5;
 
-    CornerPathEffect effect;
-    Paint textpaint;
-    int max = 10;
+    private CornerPathEffect effect;
+    private Paint textpaint;
+    private int max = 10;
 
-    int centerX ;
-    int centerY ;
-    int raduis;
+    private int centerX ;
+    private int centerY ;
+    private int raduis;
     private int distance = (int) DisplayUtil.dp2px(30)*2;
 
 
@@ -87,9 +87,9 @@ public class RadarView extends View {
         pointPaint.setPathEffect(effect);
 
         textpaint = new Paint();
-        textpaint.setStyle(Paint.Style.STROKE);
+        textpaint.setStyle(Paint.Style.FILL_AND_STROKE);
         textpaint.setStrokeWidth(2);
-        textpaint.setColor(Color.RED);
+        textpaint.setColor(Color.GRAY);
         textpaint.setTextSize(40);
     }
 
@@ -126,7 +126,7 @@ public class RadarView extends View {
             drawBase(canvas,radui);
         }
 
-        if(list != null &&list.size()>4) {
+        if(list != null) {
             drawCover(canvas);
         }
 
@@ -186,6 +186,8 @@ public class RadarView extends View {
         double ang2 = Math.PI / 180 * 170;
         double ang3 = Math.PI / 180 * 200;
         double ang4 = Math.PI / 180 * 350;
+        double ang5 = Math.PI / 180 * 140;
+        double ang6 = Math.PI / 180 * 220;
        if(ang1<angle && angle<ang2 ){
            textpaint.setTextAlign(Paint.Align.LEFT);
        }else if(ang2 <angle && angle<ang3){
@@ -196,6 +198,10 @@ public class RadarView extends View {
            textpaint.setTextAlign(Paint.Align.CENTER);
        }
 
+        if(ang5<angle && angle<ang6 ){
+            y = y+50;
+        }
+
        canvas.drawText(str,x,y,textpaint);
 
     }
@@ -205,6 +211,7 @@ public class RadarView extends View {
 
     public void setList(List<RaBean> list){
         this.list = list;
+        size = list.size();
         palyAnimation();
 //        postInvalidate();
     }
@@ -235,7 +242,7 @@ public class RadarView extends View {
 
     private void palyAnimation(){
         ValueAnimator animator = ValueAnimator.ofFloat(0.f,1.f);
-        animator.setDuration(2000);
+        animator.setDuration(1000);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
