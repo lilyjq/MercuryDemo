@@ -105,6 +105,11 @@
             android:layout_height="300dp"
             android:padding="10dp"/>
 
+        <com.mercury.demo.view.MyTextView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/color_yellow"/>
+
 
     </LinearLayout>
 

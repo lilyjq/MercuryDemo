@@ -29,11 +29,11 @@ public class TestLayoutActivity extends Activity {
 
     private void initRadarView(){
         List<RaBean> list = new ArrayList<>();
-        list.add(new RaBean(4));
-        list.add(new RaBean(5));
-        list.add(new RaBean(7));
-        list.add(new RaBean(3));
-        list.add(new RaBean(6));
+        list.add(new RaBean(4,"简直了"));
+        list.add(new RaBean(5,"真厉害"));
+        list.add(new RaBean(7,"233333"));
+        list.add(new RaBean(3,"大力出奇迹"));
+        list.add(new RaBean(6,"不可思议"));
         radarView.setList(list);
 
     }

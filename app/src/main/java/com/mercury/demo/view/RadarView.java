@@ -1,15 +1,16 @@
 package com.mercury.demo.view;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 
 import com.mercury.demo.R;
 import com.mercury.demo.data.RaBean;
@@ -28,11 +29,13 @@ public class RadarView extends View {
     int lineSize = 5;
 
     CornerPathEffect effect;
+    Paint textpaint;
     int max = 10;
 
     int centerX ;
     int centerY ;
     int raduis;
+    private int distance = (int) DisplayUtil.dp2px(30)*2;
 
 
 
@@ -49,6 +52,14 @@ public class RadarView extends View {
     public RadarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context);
+    }
+
+    private int textSize;
+
+    private void aVoid(Context context, @Nullable AttributeSet attrs){
+        TypedArray typedArray =context.obtainStyledAttributes(attrs,R.styleable.RadarView);
+        textSize = (int) typedArray.getDimension(R.styleable.RadarView_textSize,16);
+
     }
 
     private void initView(Context context){
@@ -74,6 +85,12 @@ public class RadarView extends View {
         effect = new CornerPathEffect(30.f);
         coverPaint.setPathEffect(effect);
         pointPaint.setPathEffect(effect);
+
+        textpaint = new Paint();
+        textpaint.setStyle(Paint.Style.STROKE);
+        textpaint.setStrokeWidth(2);
+        textpaint.setColor(Color.RED);
+        textpaint.setTextSize(40);
     }
 
     @Override
@@ -103,35 +120,93 @@ public class RadarView extends View {
         int height  = getHeight()-paddingTop-paddingBottom;
          centerX = width/2;
          centerY = height/2;
-         raduis = width>height? height/2-10 :width/2-10;
+         raduis = width>height? height/2-distance :width/2-distance;
         for(int i = 1;i<lineSize+1;i++){
             int radui = raduis/lineSize*i;
             drawBase(canvas,radui);
         }
+
         if(list != null &&list.size()>4) {
+            drawCover(canvas);
+        }
+
+    }
+
+
+
+    private void drawCover(Canvas canvas){
             Path path = new Path();
-            for (int i = 0; i < 5; i++) {
-                double angle = Math.PI / 180 * (360 / size * i - 90);
+
+            for (int i = 0; i < size; i++) {
+                //弧长等于半径的弧,其所对的圆心角为1弧度，而一个圆的周长为2πr，其对应的弧度数为2πr/r=2π（即360°
+                //弧度和角度的换算关系如下：
+                //1弧度=180/π度
+                //1度=π/180弧度
+                //也就是说，180度=π 弧度
+                double angle = 2*Math.PI/size*i;
                 double a = 1.0;
-                double precent = list.get(i).point*a / max*a;
-                float x = (float) (centerX + raduis * Math.cos(angle) * precent);
-                float y = (float) (centerY + raduis * Math.sin(angle) * precent);
-                canvas.drawPoint(x, y, coverPaint);
+                double precent = list.get(i).point*a / max*a*mCurF;
+                float x = (float) (centerX + raduis * Math.sin(angle) * precent);
+                float y = (float) (centerY - raduis * Math.cos(angle) * precent);
+//                if(i == 0)
+//                canvas.drawPoint(x, y, coverPaint);
+                int radui = raduis/lineSize*6;
+                float xt = (float) (centerX + (raduis+10) * Math.sin(angle));
+                float xy = (float) (centerY - (raduis+10) * Math.cos(angle));
+//                coverPaint.setColor(getResources().getColor(R.color.color_yellow));
+                canvas.drawPoint(xt,xy,coverPaint);
+                drawText(canvas,angle,xt,xy,i);
                 if (i == 0) {
                     path.moveTo(x, y);
                 } else {
                     path.lineTo(x, y);
                 }
             }
+
             path.close();
             canvas.drawPath(path, coverPaint);
-        }
+
+    }
+
+
+    private void drawText(Canvas canvas,double angle,float x,float y,int i){
+     /*   int tempI = 0;
+         for(int i= 0;i<list.size()-2;i++){
+             String forword = list.get(i).name;
+             String backword = list.get(i+1).name;
+             if(forword.length()>backword.length()){
+                 tempI = i;
+             }else{
+                 tempI = i+1;
+             }
+         }
+        String maxLengthStr = list.get(tempI).name;*/
+        String str = list.get(i).name;
+        double ang1 = Math.PI / 180 ;
+        double ang2 = Math.PI / 180 * 170;
+        double ang3 = Math.PI / 180 * 200;
+        double ang4 = Math.PI / 180 * 350;
+       if(ang1<angle && angle<ang2 ){
+           textpaint.setTextAlign(Paint.Align.LEFT);
+       }else if(ang2 <angle && angle<ang3){
+           textpaint.setTextAlign(Paint.Align.CENTER);
+       }else if(ang3<angle && angle<ang4){
+           textpaint.setTextAlign(Paint.Align.RIGHT);
+       }else{
+           textpaint.setTextAlign(Paint.Align.CENTER);
+       }
+
+       canvas.drawText(str,x,y,textpaint);
+
     }
 
     List<RaBean> list;
+
+
     public void setList(List<RaBean> list){
         this.list = list;
-        postInvalidate();
+        palyAnimation();
+//        postInvalidate();
     }
 
 
@@ -142,10 +217,9 @@ public class RadarView extends View {
         Path path = new Path();
         paint.setPathEffect(effect);
         for(int i= 0;i<size;i++){
-            double angle = Math.PI/180*(360/size*i-90);
-            float x = (float) (centerX+raduis*Math.cos(angle));
-            float y = (float) (centerY+raduis*Math.sin(angle));
-//            canvas.drawPoint(x,y,pointPaint);
+            double angle = 2*Math.PI/size*i;
+            float x = (float) (centerX+raduis*Math.sin(angle));
+            float y = (float) (centerY-raduis*Math.cos(angle));
             if(i == 0) {
                 path.moveTo(x, y);
             }else {
@@ -155,4 +229,22 @@ public class RadarView extends View {
         path.close();
         canvas.drawPath(path,paint);
     }
+
+
+    private float mCurF = 0;
+
+    private void palyAnimation(){
+        ValueAnimator animator = ValueAnimator.ofFloat(0.f,1.f);
+        animator.setDuration(2000);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                  mCurF = (float) animation.getAnimatedValue();
+                  postInvalidate();
+            }
+        });
+
+        animator.start();
+    }
+
 }
