@@ -9,7 +9,12 @@
 
     <declare-styleable name="RadarView">
         <attr name="textSize" format="dimension"/>
-
+        <attr name="lineColor" format="color"/>
+        <attr name="textColor" format="color"/>
+        <attr name="coverColor" format="color"/>
+        <attr name="defalutSize" format="integer"/>
+        <attr name="lineSize" format="integer"/>
+        <attr name="lineRound" format="integer"/>
 
     </declare-styleable>
 

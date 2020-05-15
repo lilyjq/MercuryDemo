@@ -103,6 +103,9 @@
             android:id="@+id/radio"
             android:layout_width="300dp"
             android:layout_height="300dp"
+            app:lineColor="@color/color_yellow_line"
+            app:coverColor="@color/color_yellow"
+            app:textColor="@color/textcolor"
             android:padding="10dp"/>
 
         <com.mercury.demo.view.MyTextView

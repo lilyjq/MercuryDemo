@@ -39,39 +39,49 @@ public class RadarView extends View {
 
 
 
-    public RadarView(Context context) {
-        super(context);
-        initView(context);
-    }
+
 
     public RadarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initView(context);
+        typeArray(context,attrs);
+        init(context);
     }
 
     public RadarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initView(context);
+        typeArray(context,attrs);
+        init(context);
     }
 
     private int textSize;
+    private int textColor;
+    private int lineColor;
+    private int coverColor;
+    private float roundSize;
 
-    private void aVoid(Context context, @Nullable AttributeSet attrs){
+    private void typeArray(Context context, @Nullable AttributeSet attrs){
         TypedArray typedArray =context.obtainStyledAttributes(attrs,R.styleable.RadarView);
         textSize = (int) typedArray.getDimension(R.styleable.RadarView_textSize,16);
+        textColor = typedArray.getColor(R.styleable.RadarView_textColor,Color.GRAY);
+        lineColor = typedArray.getColor(R.styleable.RadarView_lineColor,getResources().getColor(R.color.color_pink_line));
+        coverColor = typedArray.getColor(R.styleable.RadarView_coverColor,getResources().getColor(R.color.color_pink));
+        size = typedArray.getInt(R.styleable.RadarView_defalutSize,5);
+        lineSize = typedArray.getInt(R.styleable.RadarView_lineSize,5);
+        roundSize = typedArray.getFloat(R.styleable.RadarView_lineRound,30);
+        typedArray.recycle();
 
     }
 
-    private void initView(Context context){
+    private void init(Context context){
         paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(context.getResources().getColor(R.color.color_pink_line));
+        paint.setColor(lineColor);
         paint.setAntiAlias(true);
         paint.setStrokeWidth(5);
 
         coverPaint = new Paint();
         coverPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        coverPaint.setColor(context.getResources().getColor(R.color.color_pink));
+        coverPaint.setColor(coverColor);
         coverPaint.setAntiAlias(true);
         coverPaint.setStrokeWidth(5);
 
@@ -82,14 +92,14 @@ public class RadarView extends View {
         pointPaint.setStrokeWidth(20);
         pointPaint.setStrokeCap(Paint.Cap.ROUND);
 
-        effect = new CornerPathEffect(30.f);
+        effect = new CornerPathEffect(roundSize);
         coverPaint.setPathEffect(effect);
-        pointPaint.setPathEffect(effect);
+        paint.setPathEffect(effect);
 
         textpaint = new Paint();
         textpaint.setStyle(Paint.Style.FILL_AND_STROKE);
         textpaint.setStrokeWidth(2);
-        textpaint.setColor(Color.GRAY);
+        textpaint.setColor(textColor);
         textpaint.setTextSize(40);
     }
 
@@ -153,7 +163,7 @@ public class RadarView extends View {
                 float xt = (float) (centerX + (raduis+10) * Math.sin(angle));
                 float xy = (float) (centerY - (raduis+10) * Math.cos(angle));
 //                coverPaint.setColor(getResources().getColor(R.color.color_yellow));
-                canvas.drawPoint(xt,xy,coverPaint);
+                canvas.drawPoint(xt,xy,pointPaint);
                 drawText(canvas,angle,xt,xy,i);
                 if (i == 0) {
                     path.moveTo(x, y);

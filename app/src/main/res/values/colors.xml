@@ -6,5 +6,6 @@
     <color name="textcolor">#3c4383</color>
     <color name="color_pink">#99cb86ba</color>
     <color name="color_pink_line">#eacaea</color>
-    <color name="color_yellow">#FFE297</color>
+    <color name="color_yellow">#99EBB25F</color>
+    <color name="color_yellow_line">#FFE297</color>
 </resources>
