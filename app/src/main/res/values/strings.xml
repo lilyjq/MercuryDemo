@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MercuryDemo</string>
+    <string name="app_name">Mercury</string>
     <string name="take_photo">Take Photo</string>
     <string name="open_ablum">Open Ablum</string>
     <string name="clear_sp">Clear SP</string>
