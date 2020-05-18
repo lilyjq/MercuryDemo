@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import com.mercury.MainAdapter;
+import com.mercury.demo.aty.ProgressActivity;
 import com.mercury.demo.aty.RadarViewActivity;
 import com.mercury.demo.aty.TestLayoutActivity;
 import com.mercury.demo.camera.AvatarActivity;
@@ -45,6 +46,10 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
                 break;
             case 3:
                 startActivity(new Intent(this, TabHostActivity.class));
+                break;
+            case 4:
+                startActivity(new Intent(this, ProgressActivity.class));
+                break;
             default:
                 break;
         }

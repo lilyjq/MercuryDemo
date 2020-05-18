@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.mercury.demo.R;
 import com.mercury.demo.data.RaBean;
+import com.mercury.demo.view.PrgressView;
 import com.mercury.demo.view.RadarView;
 
 import java.util.ArrayList;
@@ -17,11 +18,14 @@ public class TestLayoutActivity extends Activity {
 
 
     RadarView radarView;
+    PrgressView prgressView2;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_study);
         radarView = findViewById(R.id.radio);
+        prgressView2 = findViewById(R.id.ps2);
+        prgressView2.setRingPercent(0.6f);
         initRadarView();
     }
 

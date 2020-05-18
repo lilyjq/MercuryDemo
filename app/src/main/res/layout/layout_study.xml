@@ -39,6 +39,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginTop="20dp">
 
             <ImageView
@@ -101,8 +102,8 @@
 
         <com.mercury.demo.view.RadarView
             android:id="@+id/radio"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:lineColor="@color/color_yellow_line"
             app:coverColor="@color/color_yellow"
             app:textColor="@color/textcolor"
@@ -111,7 +112,15 @@
         <com.mercury.demo.view.MyTextView
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:visibility="gone"
             android:background="@color/color_yellow"/>
+
+
+        <com.mercury.demo.view.PrgressView
+            android:id="@+id/ps2"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"/>
 
 
     </LinearLayout>
