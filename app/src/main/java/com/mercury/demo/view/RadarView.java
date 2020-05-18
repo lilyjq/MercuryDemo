@@ -36,6 +36,7 @@ public class RadarView extends View {
     private int centerY ;
     private int raduis;
     private int distance = (int) DisplayUtil.dp2px(30)*2;
+    private Path path;
 
 
 
@@ -101,6 +102,9 @@ public class RadarView extends View {
         textpaint.setStrokeWidth(2);
         textpaint.setColor(textColor);
         textpaint.setTextSize(40);
+
+        path = new Path();
+        coverPath = new Path();
     }
 
     @Override
@@ -142,10 +146,9 @@ public class RadarView extends View {
 
     }
 
-
+    Path coverPath;
 
     private void drawCover(Canvas canvas){
-            Path path = new Path();
             for (int i = 0; i < size; i++) {
                 //弧长等于半径的弧,其所对的圆心角为1弧度，而一个圆的周长为2πr，其对应的弧度数为2πr/r=2π（即360°
                 //弧度和角度的换算关系如下：
@@ -166,14 +169,14 @@ public class RadarView extends View {
                 canvas.drawPoint(xt,xy,pointPaint);
                 drawText(canvas,angle,xt,xy,i);
                 if (i == 0) {
-                    path.moveTo(x, y);
+                    coverPath.moveTo(x, y);
                 } else {
-                    path.lineTo(x, y);
+                    coverPath.lineTo(x, y);
                 }
             }
 
-            path.close();
-            canvas.drawPath(path, coverPaint);
+            coverPath.close();
+            canvas.drawPath(coverPath, coverPaint);
 
     }
 
@@ -230,7 +233,6 @@ public class RadarView extends View {
     绘制底部的线条
      */
     private void drawBase(Canvas canvas,int raduis){
-        Path path = new Path();
         paint.setPathEffect(effect);
         for(int i= 0;i<size;i++){
             double angle = 2*Math.PI/size*i;
