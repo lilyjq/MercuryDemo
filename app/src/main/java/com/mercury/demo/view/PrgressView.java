@@ -105,7 +105,7 @@ public class PrgressView extends View {
         textPaint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint2.setColor(getResources().getColor(R.color.color_pink_line));
         textPaint2.setStyle(Paint.Style.FILL);
-        textPaint2.setTextSize(DisplayUtil.sp2px(getContext(),20));
+        textPaint2.setTextSize(DisplayUtil.sp2px(getContext(),28));
         rect = new Rect();
     }
 
