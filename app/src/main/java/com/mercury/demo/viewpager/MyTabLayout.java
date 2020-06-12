@@ -109,12 +109,13 @@ public class MyTabLayout extends FrameLayout implements View.OnClickListener {
                     scrollN=  scrollN-center;
                     scrollN = scrollN+herf;
                 }
-
                 if(scrollN != mLastScrollN){
                     mLastScrollN = scrollN;
                     horizontalScrollView.scrollTo(scrollN,0);
                 }
-
+//                mCurrentScrollTab = position;
+//                mPositionOffset = positionOffset;
+//                scrollToCurrentTab();
 
             }
 
@@ -128,8 +129,56 @@ public class MyTabLayout extends FrameLayout implements View.OnClickListener {
 
 //        viewPager2.getAdapter().get
     }
+    private float mPositionOffset;
+    private int mCurrentScrollTab = 0;
+    private void scrollToCurrentTab() {
+        if ( mPositionOffset <= 0) {
+            return;
+        }
+        View childAt = list.get(mCurrentScrollTab);
+        if (null == childAt) {
+            return;
+        }
+        int offset = (int) (mPositionOffset * childAt.getWidth());//百分之offest的页面距0，大概理解为需要移动的距离
+        int newScrollX = childAt.getLeft() + offset;
+        //布局的中心距离。
+        int centerDistance = getWidth() / 2;
 
+//        int herf = 0;
 
+//        if (mCurrentScrollTab < 5) {
+//            View nextTab = list.get(mCurrentScrollTab + 1);
+//            if (null != nextTab) {
+//                //left+
+//                float leftDistance = childAt.getLeft() + (nextTab.getLeft() - childAt.getLeft()) * mPositionOffset;
+//                float rightDistance = childAt.getRight() + (nextTab.getRight() - childAt.getRight()) * mPositionOffset;
+//                herf = (int) ((rightDistance - leftDistance) / 2);//这个是右边那个item的一半*moffset
+//                int a = (int) (nextTab.getWidth()/2*mPositionOffset);
+//                if(a == herf){
+//                    Logger.e("yyyy",true);
+//                }
+//            }
+//        }
+
+        if (mCurrentScrollTab > 0 || offset > 0) {
+            //这个算的当前的Tab距离中心点的位置
+            newScrollX -= centerDistance;
+            //后面这个是下一个Tab距离中心点的位置。
+//            newScrollX += herf;
+        }
+        if(mCurrentScrollTab == 0 && mLastScrollX<0 && newScrollX>0){
+            return;
+        }
+        if (newScrollX != mLastScrollX) {
+            mLastScrollX = newScrollX;
+            horizontalScrollView.scrollTo(newScrollX, 0);
+        }
+    }
+
+    /**
+     * 记录一下滑动的相对距离，如果跟最新的一样的话就不做操作。
+     */
+    private int mLastScrollX = 0;
 
     private ViewPager viewPager;
 
@@ -151,6 +200,13 @@ public class MyTabLayout extends FrameLayout implements View.OnClickListener {
                 if(position >0 || offset>0){
                     scrollN=  scrollN-center;
                     scrollN = scrollN+herf;
+                }
+                if(position == 0 && mLastScrollN<0 && scrollN>0){
+                    return;
+                }
+
+                if((scrollN>0 && mLastScrollN<0) ||(scrollN<0 && mLastScrollN>0)){
+                    return;
                 }
 
                 if(scrollN != mLastScrollN){

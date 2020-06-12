@@ -10,6 +10,7 @@ import com.mercury.MainAdapter;
 import com.mercury.demo.aty.ProgressActivity;
 import com.mercury.demo.aty.RadarViewActivity;
 import com.mercury.demo.aty.TestLayoutActivity;
+import com.mercury.demo.behavior.CoordinateActivity;
 import com.mercury.demo.camera.AvatarActivity;
 import com.mercury.demo.viewpager.TabHostActivity;
 
@@ -49,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
                 break;
             case 4:
                 startActivity(new Intent(this, ProgressActivity.class));
+                break;
+            case 5:
+                startActivity(new Intent(this, CoordinateActivity.class));
                 break;
             default:
                 break;

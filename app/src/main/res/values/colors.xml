@@ -8,4 +8,8 @@
     <color name="color_pink_line">#eacaea</color>
     <color name="color_yellow">#99EBB25F</color>
     <color name="color_yellow_line">#FFE297</color>
+    <color name="textColorSecond">#8389c0</color>
+    <color name="textColorFour">#3c4383</color>
+    <color name="textColorFive">#7e84c3</color>
+    <color name="textColorThree">#80b5b8d9</color>
 </resources>
