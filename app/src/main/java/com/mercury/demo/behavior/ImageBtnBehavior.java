@@ -20,6 +20,8 @@ public class ImageBtnBehavior extends CoordinatorLayout.Behavior<View> {
     private boolean isAnimate;//动画是否正在进行
 
 
+
+
     public ImageBtnBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -44,11 +46,13 @@ public class ImageBtnBehavior extends CoordinatorLayout.Behavior<View> {
      */
     @Override
     public void onNestedPreScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull View child, @NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
-        Log.e("aaa","onNestedPreScroll : dy"+dy+"isAnimate"+isAnimate+"childviesible"+(child.getVisibility()==View.VISIBLE));
+//        Log.e("aaa","onNestedPreScroll : dy      "+dy+"        isAnimate:         "+isAnimate+"         childviesible:       " +(child.getVisibility()==View.VISIBLE));
         if(dy>0 && !isAnimate && child.getVisibility() == View.VISIBLE){
-            hide(child);
-        }else if(dy<0 && !isAnimate && child.getVisibility()== View.VISIBLE ){
-            show(child);
+//            hide(child);
+            hideRight(child);
+        }else if(dy<0 && !isAnimate&& child.getVisibility() == View.INVISIBLE){
+//            show(child);
+            showLeft(child);
         }
 //        super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type);
 
@@ -108,6 +112,61 @@ public class ImageBtnBehavior extends CoordinatorLayout.Behavior<View> {
         });
         animator.start();
 
+    }
+
+    private void showLeft(final View view){
+        ViewPropertyAnimator animator = view.animate().translationX(0).setInterpolator(INTERPOLATOR).setDuration(1000);
+        animator.setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                view.setVisibility(View.VISIBLE);
+                isAnimate = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                isAnimate = false;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animator.start();
+
+    }
+
+    private void hideRight(final  View view){
+        ViewPropertyAnimator animator = view.animate().translationX(view.getMeasuredWidth()).setInterpolator(INTERPOLATOR).setDuration(1000);
+        animator.setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                isAnimate = true;
+                view.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                isAnimate = false;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+               showLeft(view);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animator.start();
     }
 
 }
