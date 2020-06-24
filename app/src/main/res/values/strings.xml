@@ -9,6 +9,7 @@
     <string name="indicator">Indicator</string>
     <string name="progressview">ProgresView</string>
     <string name="behavior">Behavior</string>
+    <string name="path">PathMeasure</string>
     <string name="text_test">君不见黄河之水天上来，奔流到海不复回。</string>
     <string name="test_transformPivot">transformPivotX transformPivotY</string>
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -82,5 +83,22 @@ public class RxJavaActivity extends Activity {
 
                     }
                 });
+
+        Disposable disposable4 = ApiHelp.getTestService().getLove(new LoveRequestBody())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Function<LoveReulst, String>() {
+                    @Override
+                    public String apply(LoveReulst loveReulst) throws Exception {
+                        return null;
+                    }
+                }).subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+
+                    }
+                });
+
+
     }
 }

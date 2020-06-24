@@ -34,6 +34,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         list.add(context.getString(R.string.indicator));
         list.add(context.getString(R.string.progressview));
         list.add(context.getString(R.string.behavior));
+        list.add(context.getString(R.string.path));
         notifyDataSetChanged();
     }
 
