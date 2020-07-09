@@ -13,6 +13,7 @@ import com.mercury.demo.aty.RadarViewActivity;
 import com.mercury.demo.aty.TestLayoutActivity;
 import com.mercury.demo.behavior.CoordinateActivity;
 import com.mercury.demo.camera.AvatarActivity;
+import com.mercury.demo.scrollcut.ScrollCutAcitivty;
 import com.mercury.demo.viewpager.TabHostActivity;
 
 
@@ -57,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
                 break;
             case 6:
                 startActivity(new Intent(this, PathActivity.class));
+                break;
+            case 7:
+                startActivity(new Intent(this, ScrollCutAcitivty.class));
                 break;
             default:
                 break;

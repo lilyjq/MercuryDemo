@@ -55,6 +55,9 @@
         <activity android:name=".aty.PathActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".scrollcut.ScrollCutAcitivty"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
     </application>
 
