@@ -55,9 +55,9 @@ public class ScrollCutAcitivty extends AppCompatActivity {
 //                if(ivHeight>0 &&ivWidth>0) {
                     Log.e("left left",left+"");
 //                    scrollLineView2.stopOnMeasure(true);
-//                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) imageView.getLayoutParams();
-//                            params.width = left;
-//                            imageView.setLayoutParams(params);
+                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) imageView.getLayoutParams();
+                            params.width = left;
+                            imageView.setLayoutParams(params);
 
 //                }
             }
