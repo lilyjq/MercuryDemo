@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="LockedOrientationActivity">
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
@@ -58,6 +58,8 @@
         <activity android:name=".scrollcut.ScrollCutAcitivty"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".banner.BannerActivity"
+            android:screenOrientation="portrait"/>
 
     </application>
 

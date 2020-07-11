@@ -11,6 +11,7 @@
     <string name="behavior">Behavior</string>
     <string name="path">PathMeasure</string>
     <string name="scrollcut">ScrollCutView</string>
+    <string name="banner">Banner</string>
     <string name="text_test">君不见黄河之水天上来，奔流到海不复回。</string>
     <string name="test_transformPivot">transformPivotX transformPivotY</string>
 
