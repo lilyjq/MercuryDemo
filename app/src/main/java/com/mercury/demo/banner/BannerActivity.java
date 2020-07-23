@@ -1,8 +1,12 @@
 package com.mercury.demo.banner;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.mercury.demo.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,5 +44,17 @@ public class BannerActivity extends AppCompatActivity {
                 }
             }
         });
+        List<String> id = new ArrayList<>();
+        id.add("111");
+        id.add("222");
+        id.add("333");
+        id.add("444");
+        id.add("555");
+        id.add("666");
+        id.add("777");
+
+        for (int i=0;i<id.size();i++){
+            Log.e("test test",id.get(i));
+        }
     }
 }

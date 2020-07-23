@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mercury.demo.R;
+import com.youth.banner.Banner;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
     private int[]color = new int[]{R.color.color_pink,R.color.color_yellow_line,R.color.textColorSecond};
 
     public BannerAdapter() {
+//        Banner
     }
 
     @NonNull
@@ -51,9 +53,9 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
         return color.length+2;
     }
 
-    class BannerViewHolder extends RecyclerView.ViewHolder{
+    static class BannerViewHolder extends RecyclerView.ViewHolder{
         ConstraintLayout cl;
-        public BannerViewHolder(@NonNull View itemView) {
+        BannerViewHolder(@NonNull View itemView) {
             super(itemView);
             cl = itemView.findViewById(R.id.cl);
         }

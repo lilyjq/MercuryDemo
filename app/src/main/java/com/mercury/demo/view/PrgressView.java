@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.mercury.demo.R;
@@ -33,10 +34,18 @@ public class PrgressView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        Log.e("eeeeeee  onSizeChanged",w+"         "+h);
+    }
+
     Rect rect;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        Log.e("eeeeeee  onDraw",getWidth()+"         "+getHeight());
         int centerX = getWidth()/2;
         int centerY = getHeight()/2;
         int raduis = centerX-ringWidth;
@@ -47,15 +56,15 @@ public class PrgressView extends View {
 //        canvas.drawArc(rectF,-90,100,false,coverPaint);
 
         textPaint.getTextBounds(title1,0,title1.length(),rect);
-        canvas.drawText(title1, centerX - rect.width() / 2, centerY -centerY/4 + rect.height()/2, textPaint);
+        canvas.drawText(title1, centerX - rect.width() / 2.0f, centerY -centerY/4.0f + rect.height()/2.0f, textPaint);
 
 
         textPaint2.getTextBounds(title2,0,title2.length(),rect);
-        canvas.drawText(title2,centerX- rect.width()/2,centerY+rect.height()/2,textPaint2);
+        canvas.drawText(title2,centerX- rect.width()/2.0f,centerY+rect.height()/2.0f,textPaint2);
 
 
         textPaint.getTextBounds(title3,0,title3.length(),rect);
-        canvas.drawText(title3,centerX-rect.width()/2,centerY+centerY/4+rect.height()/2,textPaint);
+        canvas.drawText(title3,centerX-rect.width()/2.0f,centerY+centerY/4.0f+rect.height()/2.0f,textPaint);
 
 
 
