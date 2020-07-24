@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.mercury.demo.R;
+import com.mercury.demo.tranformer.ZoomOutPageTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class BannerActivity extends AppCompatActivity {
         viewPager2 = findViewById(R.id.viewpager2);
          adapter = new BannerAdapter();
         viewPager2.setAdapter(adapter);
+        viewPager2.setPageTransformer(new ZoomOutPageTransformer());
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
