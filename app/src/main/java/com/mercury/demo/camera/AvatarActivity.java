@@ -18,6 +18,7 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -98,11 +99,11 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
 
 
     private Uri getPath(String path) {
-
+//path = "/storage/emulated/0/Pictures/1596531546808.jpg";
         if(!TextUtils.isEmpty(path)){
-            if(path.startsWith("content:")) {
+//            if(path.startsWith("content:")) {
                 return getImageContentUri(path);
-            }
+//            }
         }
         return  null;
     }
@@ -157,7 +158,20 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
     File tempFile;
 
     private void startCamera() {
-        String bitmapPath = Environment.getExternalStorageDirectory().getPath() + "/MercuryDemo/pic/" + Calendar.getInstance().getTime() + ".jpg";
+//        boolean isQ = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
+        File file = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        String bitmapPath ;
+        if(file != null){
+         bitmapPath = file.getAbsolutePath();
+         Log.e("eeee",bitmapPath);
+            bitmapPath = file.getPath()+"/Mercury";
+            Log.e("eeee",bitmapPath);
+
+        }else{
+            bitmapPath = getFilesDir().getPath()+"/Mercury";
+        }
+        //只能在Q以下的手机使用该方法
+//        String bitmapPath = Environment.getExternalStorageDirectory().getPath() + "/MercuryDemo/pic/" + Calendar.getInstance().getTime() + ".jpg";
 //        Intent intent = new Intent("android.media.action.IMGAE_CAPTURE");
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //当指定的aty组件没有找到是会抛出ActivityNotFoundException异常并直接崩溃，此时可以通过resolveActivity方式先判断
@@ -166,13 +180,7 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
 
             tempFile = createNewFile(bitmapPath, true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//                ContentValues contentValues = new ContentValues();
-//                contentValues.put(MediaStore.Images.Media.DATA,bitmapPath);
-//                photoUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
-//                photoUri = getMediaUriFromPath(bitmapPath);
                 photoUri = createQUri();
-
-
             } else {
                 if (tempFile != null) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -225,11 +233,22 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
         //不能指定相对路径 Primary directory (invalid) not allowed for content://media/external/images/media; allowed directories are [DCIM, Pictures]
         //只能指定已经存在的路径
 //        contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "/MercuryDemo/pic/");
+        //android Q中不再使用DATA字段，而用RELATIVE_PATH代替
+        //RELATIVE_PATH是相对路径不是绝对路径
+        //DCIM是系统文件夹，关于系统文件夹可以到系统自带的文件管理器中查看，不可以写没存在的名字
+//        contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "DCIM/mercury");//会在DCIM下创建一个mercury目录,若不指定将会保存至/storage/emulated/0/Pictures/1596531166577.jpg
         if (status.equals(Environment.MEDIA_MOUNTED)) {
             return getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
         } else {
             return getContentResolver().insert(MediaStore.Images.Media.INTERNAL_CONTENT_URI, contentValues);
         }
+
+
+/*        contentValues.put(MediaStore.Files.FileColumns.DISPLAY_NAME, "1212.jpeg");
+        contentValues.put(MediaStore.Files.FileColumns.MIME_TYPE, "image/jpeg");//MediaStore对应类型名
+        contentValues.put(MediaStore.Files.FileColumns.TITLE, "1212.jpeg");
+        ContentResolver resolver = getContentResolver();
+        return   resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);*/
 
     }
 
@@ -292,17 +311,15 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
                 uri = Uri.fromFile(tempFile);
             }
             //发现有的手机 没有办法用uri转化，直接将uri转为string,glide可以加载,若是Q以下根据tempfile获取路径
-
             String path = ImageUtil.getRealPathFromUri(this, uri);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && path == null) {
+            if ( path == null) {
                 path = tempFile.getAbsolutePath();
-            } else if (path == null) {
-                path = uri.toString();
             }
             Toast.makeText(this,path,Toast.LENGTH_SHORT).show();
             savaPath(path);
             Glide.with(this).load(uri).apply(RequestOptions.bitmapTransform(new CircleCrop())).placeholder(R.drawable.u).into(mAvatar);
         } else if (resultCode == RESULT_OK && requestCode == RC_OPENABLUM) {
+//            Bitmap bitmap = getBitmapFromUri(data.getData());
             String path = ImageUtil.getRealPathFromUri(this, data.getData());
             savaPath(path);
             Glide.with(this).load(data.getData()).apply(RequestOptions.bitmapTransform(new CircleCrop())).placeholder(R.drawable.u).into(mAvatar);
@@ -311,11 +328,11 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
 
     private void openAblum() {
         Intent intent;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        } else {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+//        } else {
             intent = new Intent(Intent.ACTION_PICK);
-        }
+//        }
         intent.setType("image/*");
         startActivityForResult(intent, RC_OPENABLUM);
     }
@@ -350,12 +367,15 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
                 new String[]{path}, null);
         if (cursor != null && cursor.moveToFirst()) {
             int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-            Uri baseUri = Uri.parse("content://media/external/images/media");
-            //1
-            Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
-            //2
             cursor.close();
-            return Uri.withAppendedPath(baseUri, "" + id);
+            //1
+//            Uri baseUri = Uri.parse("content://media/external/images/media");
+//            return Uri.withAppendedPath(baseUri, "" + id);
+            //2
+            return Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
+
+
+
         } else {
             if (new File(path).exists()) {
                 ContentValues values = new ContentValues();
@@ -385,8 +405,6 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
             Bitmap bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
             parcelFileDescriptor.close();
             return bitmap;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
