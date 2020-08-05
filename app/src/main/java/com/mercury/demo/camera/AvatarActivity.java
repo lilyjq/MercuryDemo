@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -75,6 +76,10 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
        }else{
            Glide.with(this).load(path).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.u).into(mAvatar);
        }
+//storage/emulated/0/DCIM/Camera/20200803_184740.jpg
+        ///storage/emulated/0/Pictures/_Mon Aug 03 17_57_55 GMT+08_00 2020_report.jpg
+//        getImageUriByName("_Mon Aug 03 17_57_55 GMT+08_00 2020_report.jpg");
+
 
         mOpenAblumTv.setOnClickListener(this);
         mTakePhotoTv.setOnClickListener(this);
@@ -227,6 +232,7 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
 
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
+
     private Uri createQUri() {
         String status = Environment.getExternalStorageState();
         ContentValues contentValues = new ContentValues();
@@ -321,6 +327,9 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
         } else if (resultCode == RESULT_OK && requestCode == RC_OPENABLUM) {
 //            Bitmap bitmap = getBitmapFromUri(data.getData());
             String path = ImageUtil.getRealPathFromUri(this, data.getData());
+            Log.e("eeee    path",path);
+            Log.e("eeee    uri",data.getData().toString());
+            Log.e("eeee    uri path",data.getData().getPath());
             savaPath(path);
             Glide.with(this).load(data.getData()).apply(RequestOptions.bitmapTransform(new CircleCrop())).placeholder(R.drawable.u).into(mAvatar);
         }
@@ -357,7 +366,7 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
 
     /**
      * 通过绝对路径去获取uri
-     *
+     *只能是公共的图片
      * @param path
      * @return
      */
@@ -373,9 +382,6 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
 //            return Uri.withAppendedPath(baseUri, "" + id);
             //2
             return Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
-
-
-
         } else {
             if (new File(path).exists()) {
                 ContentValues values = new ContentValues();
@@ -392,6 +398,31 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     /**
+     * 用保存的name获取其uri
+     * 只能是公共的图片
+     * @param name name
+     */
+
+    private void getImageUriByName(String name){
+        ContentResolver resolver = getContentResolver();
+        if(resolver != null) {
+            Cursor cursor = resolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null,
+                    MediaStore.Images.Media.DISPLAY_NAME + "=?", new String[]{name}, null);
+            if(cursor!= null && cursor.moveToFirst()){
+                int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+                String path =cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.RELATIVE_PATH));
+                Uri uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,id+"");
+                Log.e("eeeepath",path);
+                Log.e("eeeeuri",uri.toString());
+                cursor.close();
+                Glide.with(this).load(uri).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.u).into(mAvatar);
+            }
+
+        }
+
+    }
+
+    /**
      * 根据uri 获取图片的bitmap
      *
      * @param uri
@@ -399,6 +430,7 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
      */
 
     private Bitmap getBitmapFromUri(Uri uri) {
+        //Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
         try {
             ParcelFileDescriptor parcelFileDescriptor = getContentResolver().openFileDescriptor(uri, "r");
             FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
