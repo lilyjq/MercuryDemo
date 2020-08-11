@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import com.mercury.MainAdapter;
+import com.mercury.demo.aty.NoticeActivity;
 import com.mercury.demo.aty.PathActivity;
 import com.mercury.demo.aty.ProgressActivity;
 import com.mercury.demo.aty.RadarViewActivity;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
                 startActivity(new Intent(this, ScrollCutAcitivty.class));
                 break;
             case 8:
-                startActivity(new Intent(this, BannerActivity.class));
+                startActivity(new Intent(this, NoticeActivity.class));
                 break;
             default:
                 break;

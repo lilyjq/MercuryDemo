@@ -61,6 +61,9 @@
         <activity android:name=".banner.BannerActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".aty.NoticeActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>
