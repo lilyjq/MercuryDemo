@@ -37,6 +37,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         list.add(context.getString(R.string.path));
         list.add(context.getString(R.string.scrollcut));
         list.add(context.getString(R.string.banner));
+        list.add(context.getString(R.string.motion));
         notifyDataSetChanged();
     }
 

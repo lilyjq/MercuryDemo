@@ -64,6 +64,9 @@
         <activity android:name=".aty.NoticeActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".motionlayout.MotionTestActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

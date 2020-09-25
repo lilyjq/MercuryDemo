@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@+id/iv_filter"
+            android:layout_width="100dp"
+            android:layout_height="200dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="50dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <CustomAttribute app:attributeName="Saturation"
+                app:customFloatValue="1"/>
+
+        </Constraint>
+
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@+id/iv_filter"
+            android:layout_width="100dp"
+            android:layout_height="200dp"
+            android:layout_marginStart="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="50dp">
+
+            <CustomAttribute app:attributeName="Saturation"
+                app:customFloatValue="0"/>
+        </Constraint>
+
+
+    </ConstraintSet>
+
+    <Transition
+        android:id="@+id/trans1"
+        app:constraintSetEnd="@+id/end"
+        app:constraintSetStart="@id/start"
+        app:motionInterpolator="linear"
+        app:duration="1000">
+        <!-- <OnClick app:clickAction="toggle"
+             app:targetId="@id/iv_motion"/>-->
+
+        <OnSwipe
+            app:dragDirection="dragDown"
+            app:touchAnchorId="@id/iv_filter"
+            app:touchAnchorSide="bottom" />
+    </Transition>
+
+</MotionScene>
