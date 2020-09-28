@@ -16,6 +16,7 @@ import com.mercury.demo.banner.BannerActivity;
 import com.mercury.demo.behavior.CoordinateActivity;
 import com.mercury.demo.camera.AvatarActivity;
 import com.mercury.demo.motionlayout.MotionTestActivity;
+import com.mercury.demo.motionlayout.YouTubeActivity;
 import com.mercury.demo.scrollcut.ScrollCutAcitivty;
 import com.mercury.demo.viewpager.TabHostActivity;
 
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
                 startActivity(new Intent(this, NoticeActivity.class));
                 break;
             case 9:
-                startActivity(new Intent(this, MotionTestActivity.class));
+                startActivity(new Intent(this, YouTubeActivity.class));
                 break;
             default:
                 break;
