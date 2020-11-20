@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 
 
+import java.util.List;
+
 import androidx.annotation.Nullable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -27,6 +29,12 @@ public class RxJavaActivity extends Activity {
     private void test(){
         Observable<LoveReulst> observable1 = ApiHelp.getTestService().getLove(new LoveRequestBody());
         Observable<WeatherResult> observable2 = ApiHelp.getTestService().getWeather(new WeatherRequestBody());
+
+//        Observable<SimpleResult> observable = Observable.merge(observable1,observable2).subscribe()
+
+
+
+
 
         //1.simple
         Disposable disposable = ApiHelp.getTestService().getLove(new LoveRequestBody())
@@ -68,6 +76,16 @@ public class RxJavaActivity extends Activity {
                     }
                 });
 
+    /*    Disposable disposable21 = ApiHelp.getTestService().getLoveList(new LoveRequestBody())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Function<List<LoveReulst>, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(List<LoveReulst> loveReulsts) throws Exception {
+                        return Observable.just(loveReulsts.);
+                    }
+                })*/
+
         //3.map
         Disposable disposable3 = ApiHelp.getTestService().getLove(new LoveRequestBody())
                 .subscribeOn(Schedulers.io())
@@ -75,7 +93,7 @@ public class RxJavaActivity extends Activity {
                 .map(new Function<LoveReulst, String>() {
                     @Override
                     public String apply(LoveReulst loveReulst) throws Exception {
-                        return null;
+                        return "";
                     }
                 }).subscribe(new Consumer<String>() {
                     @Override

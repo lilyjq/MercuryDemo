@@ -18,6 +18,7 @@ import com.mercury.demo.camera.AvatarActivity;
 import com.mercury.demo.motionlayout.MotionTestActivity;
 import com.mercury.demo.motionlayout.YouTubeActivity;
 import com.mercury.demo.scrollcut.ScrollCutAcitivty;
+import com.mercury.demo.transition.TransitionActivity;
 import com.mercury.demo.viewpager.TabHostActivity;
 
 
@@ -71,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
                 break;
             case 9:
                 startActivity(new Intent(this, YouTubeActivity.class));
+                break;
+            case 10:
+                startActivity(new Intent(this, TransitionActivity.class));
                 break;
             default:
                 break;

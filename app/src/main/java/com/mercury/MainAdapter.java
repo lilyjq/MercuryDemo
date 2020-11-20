@@ -38,6 +38,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         list.add(context.getString(R.string.scrollcut));
         list.add(context.getString(R.string.banner));
         list.add(context.getString(R.string.motion));
+        list.add(context.getString(R.string.transition));
         notifyDataSetChanged();
     }
 
@@ -67,7 +68,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         return list.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    static  class ViewHolder extends RecyclerView.ViewHolder{
         TextView tv;
 
         ViewHolder(@NonNull View itemView) {

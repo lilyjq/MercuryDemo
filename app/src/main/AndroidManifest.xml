@@ -70,6 +70,15 @@
         <activity android:name=".motionlayout.YouTubeActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".transition.TransitionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TransTheme"/>
+
+        <activity android:name=".transition.TransitionInActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TransTheme"/>
+
+
     </application>
 
 </manifest>

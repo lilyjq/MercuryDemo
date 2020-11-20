@@ -12,4 +12,6 @@
     <color name="textColorFour">#3c4383</color>
     <color name="textColorFive">#7e84c3</color>
     <color name="textColorThree">#80b5b8d9</color>
+    <color name="color_one">#DF876C</color>
+    <color name="color_two">#A97EF6</color>
 </resources>

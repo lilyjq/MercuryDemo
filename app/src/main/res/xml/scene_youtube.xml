@@ -170,7 +170,7 @@
                 app:motionTarget="@id/top_image_container"
                 app:percentWidth="0"
                 app:percentX="0" />
-     <!--   percentWidth    表示视图相对大小，取值为0-1，0代表初始位置宽度，1代表结束位置宽度。这里为0就代表宽度到该位置还是和初始宽度一致。-->
+     <!--    percentWidth    表示视图相对大小，取值为0-1，0代表初始位置宽度，1代表结束位置宽度。这里为0就代表宽度到该位置还是和初始宽度一致。-->
      <!--       curveFit，表示用哪种线条轨迹经过该关键帧，默认是曲线（spline），更加圆滑。这是设置的linear为直线过渡，因为本身就是直线，所以没什么影响。-->
             <KeyPosition
                 app:curveFit="linear"
