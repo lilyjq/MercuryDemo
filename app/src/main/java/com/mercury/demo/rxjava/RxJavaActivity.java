@@ -105,6 +105,7 @@ public class RxJavaActivity extends Activity {
         Disposable disposable4 = ApiHelp.getTestService().getLove(new LoveRequestBody())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+//                .compose()
                 .map(new Function<LoveReulst, String>() {
                     @Override
                     public String apply(LoveReulst loveReulst) throws Exception {

@@ -1,7 +1,9 @@
 package com.mercury.demo.transition;
 
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.view.View;
@@ -34,7 +36,7 @@ public class TransitionInActivity extends AppCompatActivity implements View.OnCl
 
 
     ConstraintLayout root;
-    TextView tv,tv1,tv2,tv3,tv_1,tv_2,tv_3,tv4,tv5,tv6,tv7,tv8;
+    TextView tv,tv1,tv2,tv3,tv_1,tv_2,tv_3,tv4,tv5,tv6,tv7,tv8,tv9,tv10;
 
 
     @Override
@@ -56,7 +58,9 @@ public class TransitionInActivity extends AppCompatActivity implements View.OnCl
         tv6 = findViewById(R.id.tv6);
         tv7 = findViewById(R.id.tv7);
         tv8 = findViewById(R.id.tv8);
-        setClick(tv1,tv2,tv3,tv4,tv5,tv6,tv7,tv8);
+        tv9 = findViewById(R.id.tv9);
+        tv10 = findViewById(R.id.tv10);
+        setClick(tv1,tv2,tv3,tv4,tv5,tv6,tv7,tv9,tv10);
 
     }
 
@@ -102,18 +106,21 @@ public class TransitionInActivity extends AppCompatActivity implements View.OnCl
         int id = v.getId();
         switch (id){
             case R.id.tv1:
+                //Slide，向下离开屏幕出场，向上进入屏幕入场
                 Slide slide = new Slide();
                 slide.setInterpolator(new AccelerateDecelerateInterpolator());
                 TransitionManager.beginDelayedTransition(root,slide);
                 changeViewsVisible(tv);
                 break;
             case R.id.tv2:
+                //Explode，四边散开出场，四边汇入入场
                 Explode explode = new Explode();
                 explode.setInterpolator(new DecelerateInterpolator());
                 TransitionManager.beginDelayedTransition(root,explode);
                 changeViewsVisible(tv,tv_1,tv_2,tv_3);
                 break;
             case R.id.tv3:
+                //Fade，淡出 出场，淡入 入场
                 Fade fade = new Fade();
                 fade.setDuration(3000);
                 fade.setInterpolator(new BounceInterpolator());
@@ -172,7 +179,7 @@ public class TransitionInActivity extends AppCompatActivity implements View.OnCl
                 }
                 break;
             case R.id.tv8:
-//                当调用 view.scrollTo() 会触发转场效果：
+//                当调用 View 的 translation、scale 和 rotation 会触发转场效果：
                 ChangeTransform transition = new ChangeTransform();
                 transition.setInterpolator(new OvershootInterpolator());
                 TransitionManager.beginDelayedTransition(root, transition);
@@ -201,10 +208,27 @@ public class TransitionInActivity extends AppCompatActivity implements View.OnCl
                     tv_3.setScaleY(0.5f);
                 }
                 break;
-            default:
+              case R.id.tv9:
+                  ChangeTextTransition transition1 = new ChangeTextTransition();
+                  transition1.addTarget(tv_1);
+                  TransitionManager.beginDelayedTransition(root, transition1);
+                  if (TextUtils.equals(tv_1.getText(), getResources().getString(R.string.tab4))) {
+                      tv_1.setText( getResources().getString(R.string.tab8));
+                  } else {
+                      tv_1.setText( getResources().getString(R.string.tab4));
+                  }
+                  break;
+            case R.id.tv10:
+                ChangeTextTransition transition2 = new ChangeTextTransition();
+                transition2.addTarget(tv_1);
+                TransitionManager.beginDelayedTransition(root, transition2);
+                if (tv_1.getCurrentTextColor() == Color.WHITE) {
+                    tv_1.setTextColor(Color.YELLOW);
+                } else {
+                    tv_1.setTextColor(Color.WHITE);
+                }
                 break;
-
-
+            default: break;
 
         }
     }
