@@ -13,6 +13,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -30,9 +31,16 @@ public class RxJavaActivity extends Activity {
         Observable<LoveReulst> observable1 = ApiHelp.getTestService().getLove(new LoveRequestBody());
         Observable<WeatherResult> observable2 = ApiHelp.getTestService().getWeather(new WeatherRequestBody());
 
-//        Observable<SimpleResult> observable = Observable.merge(observable1,observable2).subscribe()
+    /*    Observable<SimpleResult> observable = Observable.zip(observable1, observable2, new BiFunction<LoveReulst, WeatherResult, SimpleResult>() {
+            @Override
+            public SimpleResult apply(LoveReulst loveReulst, WeatherResult weatherResult) throws Exception {
+                return null;
+            }
+        })*/
 
-
+     /*   Observable<SimpleResult> observable = Observable.merge(observable1, observable2).subscribe(new Consumer<Object>() {
+        })
+        })*/
 
 
 
@@ -105,7 +113,7 @@ public class RxJavaActivity extends Activity {
         Disposable disposable4 = ApiHelp.getTestService().getLove(new LoveRequestBody())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-//                .compose()
+//                .compose(new AsyncTransformer<>())
                 .map(new Function<LoveReulst, String>() {
                     @Override
                     public String apply(LoveReulst loveReulst) throws Exception {
@@ -118,6 +126,13 @@ public class RxJavaActivity extends Activity {
                     }
                 });
 
+
+
+//
+//        Disposable disposable41 = ApiHelp.getTestService().getLove(new LoveRequestBody())
+//                .compose(new AsyncTransformer<LoveReulst>())
+//                .map(new Function<LoveReulst, String>() {
+//                })
 
     }
 }

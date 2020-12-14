@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import com.mercury.MainAdapter;
 import com.mercury.demo.aty.NoticeActivity;
@@ -19,6 +20,7 @@ import com.mercury.demo.motionlayout.MotionTestActivity;
 import com.mercury.demo.motionlayout.YouTubeActivity;
 import com.mercury.demo.scrollcut.ScrollCutAcitivty;
 import com.mercury.demo.transition.TransitionActivity;
+import com.mercury.demo.util.HomeWatcherReceiver;
 import com.mercury.demo.viewpager.TabHostActivity;
 
 
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
 
    RecyclerView recyclerView;
    MainAdapter adapter;
+   HomeWatcherReceiver receiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +40,21 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
         adapter.setListenr(this);
         recyclerView.setAdapter(adapter);
 
+        receiver = new HomeWatcherReceiver();
+        IntentFilter filter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+//        registerReceiver(receiver,filter);
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        try {
+//            unregisterReceiver(receiver);
+//        }catch (Exception e){
+//
+//        }
+    }
 
     @Override
     public void onItemClick(int pos) {
