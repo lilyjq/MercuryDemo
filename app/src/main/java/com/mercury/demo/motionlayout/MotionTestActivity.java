@@ -21,4 +21,51 @@ public class MotionTestActivity extends Activity {
 
 
     }
-}
+
+    // a - b
+    // a oncreate onstart onresume onpuase b oncreate onstart onresume a onstop
+    //b finish b onpuase a onrestart onstart onresume b onstop ondestroy
+
+
+    /*// activity                fragemnt
+
+    oncreteview
+    onattachfragment
+
+
+
+    oncreate
+                                onattach
+                                oncreate
+                                oncreateView
+                                onViewCreate
+                                onActiviyCreate
+                                onstart
+
+
+
+    onstart
+
+
+
+                                onresume
+    onresume
+
+
+                                onpuase
+    onpuase
+
+
+                                onstop
+
+    onstop
+                                ondestroyview
+                                ondestory
+                                ondettach
+
+
+
+    ondestory
+
+
+*/}

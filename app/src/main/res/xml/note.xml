@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    进程：
+    前台进程
+    可见进程：没有任何前台组件、但仍会影响用户在屏幕上所见内容的进程
+    托管不在前台、但仍对用户可见的activity （已调用其onPause方法）
+    服务进程：正在运行，已使用startService方法启动的服务且不属于上诉两个跟高类别进程的进程
+    比如在后台播放音乐或从网络下载数据
+    后台进程：目前对用户不可见的activity进程 已调用onstop.
+    空进程：不含任何活动应用组件的进程，保留这种进程唯一的母的用于缓存 缩短此次在其中运行所启动的时间
+
+    进程间的内存空间是不可见的。
+    开启多进程的问题： application多次重建 在启动不同的process的时候都会调用
+    静态成员的失效： 产生了两个隔离的内存空间，一个内存空间里值的修改并不会影响到另一个内存空间
+    文件共享的问题：多线程的情况下有锁机制控制文件共享，但多进程中比较难，考虑调用主进程进行数据库操作
+
+
+    多进程：
+    1. 分散内存的占用，安卓系统对每个应用进程的内存都是有限制的，占内存越大通常被系统杀死的可能性越大
+    2.实现多模块 当我们的应用开发越来越大，模块越来越多，团队规模也越来越大，协作开发也是个很麻烦的事情。项目解耦，模块化，是这阶段的目标。通过模块解耦，开辟新的进程，独立的JVM，来达到数据解耦目的。模块之间互不干预，团队并行开发，责任分工也明确。
+    3.子进程崩溃、退出，主进程可以继续工作
+    4实现守护进程
+
+    :开头是私有进程 其他应用的组件不可以和他跑在同一个进程
+    小写字母开头是共有进程 其他应用设置相同的shareUID可以和他跑在同一个进程
+
+
+    oom
+    尽量不要使用setImageBitmap 或者setImageResouce 或bitmapFactory.decodeResorce 设置一张大图
+    由于这些函数在decode后都是通过java层的createBitmap完成了，要消耗很多其他的内存
+
+    可以通过bitmapfactory.decodeStream方法 直接调用JNI>>nativeDecodeAsset不会再使用java层的createBimap
+
+
+    bitmapfactory
+    decodeFile sd卡
+    decodeStream 网络、本地
+    decodeByteArray
+    decodeResource资源文件
+
+    1. 使用inJustDecodeBounds，仅仅读bitmap的长和宽。
+    2. 根据bitmap的长款和目标缩略图的长和宽，计算出inSampleSize的大小。
+    3. 使用inSampleSize，载入一个比imageview大一点的缩略图A
+    4. 使用createScaseBitmap再次压缩A，将缩略图A生成我们需要的缩略图B。
+    5. 回收缩略图A（如果A和B的比率一样，就不回收A）。
+
+    https://www.cnblogs.com/sishuiliuyun/p/4270091.html
+
+    即使设置了inSampleSize=7，但是得到的缩略图却是原图的1/4，
+    原因是inSampleSize只能是2的整数次幂，如果不是的话，向下取得最大的2的整数次幂，
+    7向下寻找2的整数次幂，就是4。这样设计的原因很可能是为了渐变bitmap压缩，毕竟按照2的次方进行压缩会比较高效和方便。
+
+
+    dialogfragment 泄露
+    commit & commitAllowingStateLoss
+    dialogfragment ->onActivityCreated 里有
+    mDialog.setOnCancelListener(this);
+    mDialog.setOnDismissListner(this);
+    mDismissMessage = mListenersHandler.obtainMessage(DISMISS, listener);
+    msg 持有 dialogfrgment  dialogfragment 又跟actvity关联
+    Handler中啊通过next()去获取msg 但没有next 的时候回阻塞 阻塞导致该msg无法被回收，mes.recycleUnchedked
+    会将msg放入msg池 可被其他的线程使用到，这就会导致msg一旦被其他线程使用就可能导致泄露
+
+    解决修改源码：private static class DialogDismissListener extends WeakReference<FixDialogFragment> implements DialogInterface.OnDismissListener {
+
+    private DialogDismissListener(FixDialogFragment referent) {
+    super(referent);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+    FixDialogFragment dialogFragment = get();
+    if (dialogFragment != null) {
+    dialogFragment.onDismissDialog(dialog);
+    }
+    }
+    }
+
+    mDialog.setOnDismissListener(new DialogDismissListener(this));
+
+
+    bitmap 学习
+    compress（format,quality,stream）方法 可能消耗较长时间，建议在子线程完成
+    CompressFormat
+    jpeg 压缩后格式可以是png 可以是jpeg,有损压缩
+    png 压缩后格式png 无损压缩
+    webp  压缩后个格式webp 是有压缩，质量相同的情况下回避jpeg
+    的图像小40% 但编码时间会比jpeg长8倍
+
+    quality 0-100 画质压缩 png来说改参数可以忽略对于WEBP格式来说，小于100为有损压缩格式，会对画质产生直接影响， 等于100时候采用的是无损压缩格式，画质是不会有改变，但是图片大小得到很好压缩；
+
+    bitmap.config.alpha_8 颜色信息只有透明度组成，占8位1 byte
+    bitmap.config.ARGB_444 由透明度与rgb四部分组成每部分是占4位 共占16位 2 byte
+    bitmap.config.ARGB_8888  ... 共占32位(默认)4byte
+    bitmap.config.RGB_565 共占16位  2byte
+
+    1个byte8个bit位
+    BitmapFactort.Options这个是什么鬼呢，  很重要！bitmap加载的配置类，想要做图片内存优化是少不了跟它打“打交道”，如下其内部属性
+
+
+    这里我们大概只说跟图片优化相关的几个重要属性
+
+
+
+    insampleSize ：采样率，默认1表示无缩放，等于2表示宽高缩放2倍，总大小缩小4倍；
+
+    inBitmap  ：被复用的bitmap；（4.4 kitkat之前是要一样大小的才能复用而 之后需要被复用的bitmap比后面的bitmap 大 否则会抛出异常）
+
+    inJustDecodeBound ： 如果设置为true，不获取图片，不分配内存，但会返回图片的高度宽度信息；
+
+    inMutable ：是否图片内容可变，如果Bitmap复用的话，需要设置为true；
+
+    inDensity ：加载bitmap时候对应的像素密度（后面会讲到）；
+
+    inTargetDensity ：bitmap位图被真实渲染出的像素密度，对应终端设备的屏幕像素密度
+
+    bitmap 占用内存分析
+
+    getAllocationByteCount
+    有复用的情况下 getByteCount()表示新解码图片占用内存的大小
+    getAllocationByteCount()表示被复用Bitmap真实占用的内存大小。
+
+    getByteCount  一行像素所咱字节大小*bitmap高度
+
+    getRowBytes
+
+    我们Bitmap内存大小除了跟我们图片宽高有关系、Bitmap.Config 以及 缩放比，而缩放比大小取决于 设备屏幕密度和图片所在drawable对应密度。
+    由此可见，我们在进行图片适配时候要准备多张图片放到不同drawable目录下，一方面保证了我们图片在各设备下的显示效果一致，另一方面系统加载适合的bitmap可以节省非常多内存空间，
+
+    图片压缩：
+    图片的大小是不会变得，因为质量压缩不会减少图片的像素，塌在保持像素的前提上下改变图片的位深以及透明度，来达到压缩图片的目的。
+    所占内存大小不变。如果是png的格式 不能进行压缩
+    采样率压缩：insampleSize 图片的长宽发生变化
+    缩放法压缩 Matrix图片的长宽发生变化
+    RGB_565 每个像素所占内存发生变化
+    createScaledBitmap
+
+    theme style
+
+    https://juejin.cn/post/6844903974047318030
+
+    style 是view 的属性集合 可以将style视为 map<view atrribute,resource>这里的key 是view的所有属性，例如控件声明并且开发者可以在布局文件中配置的属性。style 支持特定类型的控件,因为不同的控件有着不同的属性集
+    一个 Style 只作用于其应用的 view，不包含它的任何子 view。
+
+    Theme 是资源的集合，它可以被 style ，layout 或者其它引用。它为 Android 资源提供了语义明确的命名，例如 colorPrimary 是给定颜色的命名
+    。Theme 是 Map<theme attribute, resource>。theme 属性不同于 view 属性，因为它们不是特定于单个 view 类型的属性，而是指向值的指针，这些指针在应用中的适用范围更广。theme 为这些已命名的资源提供了正确的值。
+    Theme 的使用
+    您可以在具有 Context 的组件中使用 theme，例如 Activity ，View ，ViewGroup。
+    Theme 的作用范围
+    Theme 可以作为 Context 的属性被获取，并且它可以从任何 Context 或 Context 的子类获得，例如 Activity，View，或者 ViewGroup。这些对象存在于一个「树」中，其中 Activity 包含 ViewGroup，ViewGroup 包含 View。在此树的任何级别上指定主题都会影响到其后代节点，例如在 ViewGroup 上设置 Theme 会作用域其所有子 View（这与只作用于单一 View 的 Style 相反）
+    theme activity - viewgroup -view  如果都设置了theme 那么view theme 会覆盖 viewgroup theme 以此类推
+
+
+    viewmodel 具备宿主生命感知能力的数据存储与数据管理的组件 ，保存的数据如发生屏幕旋转等配置更改后 导致页面销毁重建之后依然也是存在的。
+    还能处理 aty frg与应用程序其余部分的通信。目的是获取并保留Activity或Fragment所需的信息。Activity或Fragment应能够观察ViewModel中的更改；
+    ViewModel通常通过LiveData或DataBinding公开此信息;ViewModel的唯一责任是管理UI的数据。它永远都不应访问您的视图层次结构或保留对Activity或Fragment的引用。
+
+    livedata 收消息在onresume  // onpasuse后就收不到了
+
+
+    parent.requestDisallowInterceptTouchEvent
+
+    dispatchTouchEvent 每次接收的事件时，会初始化触摸状态
+    resetTouchState()会重置mGroupFlags标识 可以理解为把disallowIntercept
+    置为false (结论是 dispatchTouchEvent中，每次触发新的时间时，disallowIntecepte
+    会置为false，所以就解释了为什么在子view中的构造方法或生命周期调用parent.requestDisallowInterceptTouchEvent
+    会失效 )
+
+
+    然后判断
+    disallowIntercept是否为true 如果为true不执行onInterceptToucheEvent
+    (mGroupFlags & FLAG_DISALLOW_INTERCEPT) != 0;
+
+    dispatchTouchEvent
+    onInterceptTouchEvent
+    onTouchEvent
+
+    在scrollView中在dispatchTouchEvent 然后在Action.Move中如果滚动距离大于mTouchSlop时才开始拦截事件
+    在滑动距离小于mTouchSlop这一时机下，子view是可以得到触摸事件的 也就解释在子view的
+    onTouchEvent方法中可以执行到parent.requestDisallowInterceptTouchEvent
+
+
+    dispatchTouchEvent 中要么为actiondown事件，要么是底下的控件处理了事件，反言之如果这个
+    viewgroup曾经把事件交给下面的view去处理，而下面的view没有处理的话 那么下次事件viewgroup
+    的intercepted 直接被赋值为true拦截事件自己处理
+
+
+    如果disallowIntecept为false 也就是默认值 那么就会去走正常的oninterceotTouchEvent去
+    判断是否拦截；像relatviveLayout等不需要直接处理事件的viewgroup y一般都会直接返回false
+    事件还是会继续传递下去 但是像recyclerview viewpager这些 就会根据情况判断是否拦截事件
+    而disallowIntecept为true 他的oninterceptTouchEvent方法不会执行
+
+    ondraw中new paint or bitmap 会导致内存抖动
+    野生技术协会
+
+    recyclerview 滚动到指定的position的recycler.scrolltoposition nowpos>pos 向前滚动到pos pos第一个上届
+    反之 会将滚动到最后一个为pos的位置 pos为所显示的最后一个
+    如果想让其一直滚动的上届 可以获取其manager  manager.scrollToPositionWithOffset(pos,0);
+
+
+    gradlew processDebugManifest -stacktrace
+    gradlew compileDebugSource
+
+    kotlin
+
+
+    let 代替object对象访问其共有属性和方法
+    object.let{
+    it.todo()
+    }
+
+    判断object 为null的操作
+    object?.let{
+    it.todo}//表示object不为null才执行let操作
+
+    also 函数
+
+    let:返回值 = 最后一行/return 表达式
+    also :返回值= 传入对象本身
+
+
+    var result = mVar.let{
+    it.fun1()
+    it.fun2()
+    it.fun3()
+    999
+    }
+    result = 999
+    var result = mVar.also{
+    it.fun1()
+    it.fun2()
+    it.fun3()
+    999
+    }
+    result = mvar
+
+
+    with 函数
+
+    with(){
+    }
+    //返回值是最后一行/return 表达式
+
+    val people
+    with (people){
+    printli($name,$age)}
+
+    run 函数
+    结合了let\with 两个函数的作用
+    调用同一个对象的多个方法属性时，可以省去对象名重复，直接调用方法名属性即可
+    定义一个变量在特定作用域内
+    统一做判空处理
+    //返回值是最后一行/return 表达式
+
+    pepole?.run{
+    printli($name,$age)}
+    }
+
+    apply函数
+    与run函数类似区别于返回值
+    run 返回值是最后一行/return 表达式
+    apply 是返回传入的对象本身
+
+    kotlin 把kotlin类和java类进行区分
+    val kotlinClass : KClass<LocalDate> = LocalDate::class
+    val javaClass : Class<LocalDate> = LocalDate::class.java
+
+    备忘录模式：
+    组合模式： 数 根节点 树枝 树叶 同时继承一个abstact 方法实现其 add remove 方法 树叶没有其add remove
+    迭代模式： List de  for each
+
+    桥接模式：a.setb
+    命令模式：commond （concretCommond）持有 recevier  recevier 是执行该commond的 invoker (invoker.setCommond  cancleCommeond)来接受该命令并执行（调用commond.excute()->recevier.excute()）
+    责任链模式：handler1.setSuccessor(hander2) hander2.setSuccessor(hander3) 形成一条责任链 1-2-3
+    中介者模式： 用一个中介对象来封装一系列的对象交互，中介者模式使得各对象不需要显示的相互引用 中介者 有对象1  2   调用其方法来发送通知 fun（msg ,obj） if(obj == obj1){obj2.notify(msg)} 这样就是两个类的交互了
+
+    享元模式：运用共享技术有效的支持大量细粒度的对象。 如果一个应用程序使用了大量的对象，而大量的这些对象造成了很大的存储开销时就应该考虑使用，还有就是对象的多数的状态 可以外部状态，如果删除对象的外部状态，那额可以相对数较少的共享对象取代很对组对象，可以考虑使用享元模式 一个flyweightfactoty 通过（类型）这来获取对象
+    解释器模式： context  get set string （需要翻译的东西） expression  orrived expression(Context context)
+    fun trans(string) get context String
+    访问者模式：person (action) action getWomen getMen SucceAction FailAction
+
+
+
+    上界、下届
+    ? extends Date  上界
+
+    ？ super Date 下界
+
+
+    rxjava 合并多个observable数据
+
+    merge 多输入单输出 发射的数据被交叉合并到一个Observable里面。注意如果你同步的合并Observable，它们将连接在一起并且不会交叉。
+    zip zip()合并两个或者多个Observables发射出的数据项，根据指定的函数Func*变换它们，并发射一个新值
+    Join
+
+    combineLatest
+
+    flatMap  对 Observable 发射的数据都应用(apply)一个函数，这个函数返回一个 Observable，然后合并这些 Observables，并且发送（emit）合并的结果。 flatMap 和 map 操作符很相像，flatMap 发送的是合并后的 Observables，map 操作符发送的是应用函数后返回的结果集。
+
+    concatMap 和 flatMap 最大的区别是 concatMap 发射的数据集是有序的，flatMap 发射的数据集是无序的。
+
+
+
+    map 对Observable发射的数据都应用一个函数，然后再发射最后的结果集。最后map()方法返回一个新的Observable。 发射A中间转变成b 发射出去
+
+
+
+    paging
+
+    positionDataSource、pageKeyedDataSource、itemKeyedDataSource
+
+    positionDataSource 适用于特定的位置加载数据、比如从某个位置开始的100条数据
+    pageKeyedDataSource setNextKey 和setPreviousKey 适用于目标数据页根据页信息请求数据的场景，即key字段是页相关信息
+    的item的信息 ，即key字段包含的是item中的信息，比如需要根据第N项的信息加载第N+1的数据。
+
+    1.PageKeyedDataSource 按页加载，如请求数据时传入page页码。
+    2.ItemKeyedDataSource 按条目加载，即请求数据需要传入其它item的信息，如加载第n+1项的数据需传入第n项的id。
+    3.PositionalDataSource 按位置加载，如加载指定从第n条到n+20条。
+
+    viewModel 可以用它来管理页面的全局变量 通过他来绑定aty frg的生命周期  它比aty和frag的生命周期长在页面ondestroy的时候viewmodel 还没有销毁 因此不要在viewmodel 持有context的引用或持有context类
+
+    MyViewModel model = new ViewModelProvider(this).get(MyViewModel.class)
+
+    设计模式：
+    工厂模式：业务封装、继承、多态、业务逻辑和页面逻辑分离。比如加减乘除这类算法分离开来，改动了一个不影响其他的。实例化对象时就单独创建一个工厂类
+    策略模式：将算法封装起来形成一个个策略、实现上就是各种策略实现策略接口、然后实现策略方法、然后用一个context方法 传入各种策略对象 再写一个方法调用其策略类的策略方法
+    如果在工厂模式下经常改动工厂类，那么应该考虑该模式（它定义了算法家族、分别封装起来，让他们之间可相互替换，此模式让算法的变换，不会影响到使用算法的客户。）
+
+    策略模式和简单工厂模式结合：在context类进行区分实现该策略
+    单一职责原则：如果一个类承担的职责过来就等于把这些职责耦合在一起，一个职责发生变化可能会削弱或者抑制这个类完成其他职责的能力，脆弱 设计变化时会遭受意想不到的结果
+    开放-封闭原则 创建抽象 对程序的改动通过增加新代码进行 而不是改变现有的代码
+    依赖倒转原则：抽象不应该依赖细节、细节应该依赖于抽象。针对接口编程、不要对实现编程  比如cpu 卡槽 可以插各种cpu
+    里氏代替原则：子类型必须能够替换他们的父类型 企鹅 鸟 不是父子类型 因为企鹅不会飞
+
+    从这句话可以知道，当某个activity变得“容易”被系统销毁时，该activity的onSaveInstanceState就会被执行，除非该activity是被用户主动销毁的，例如当用户按BACK键的时候。
+
+    注意上面的双引号，何为“容易”？言下之意就是该activity还没有被销毁，而仅仅是一种可能性。这种可能性有哪些？通过重写一个activity的所有生命周期的onXXX方法，包括onSaveInstanceState和onRestoreInstanceState方法，我们可以清楚地知道当某个activity（假定为activity A）显示在当前task的最上层时，其onSaveInstanceState方法会在什么时候被执行，有这么几种情况：
+
+
+    1、当用户按下HOME键时。
+
+    这是显而易见的，系统不知道你按下HOME后要运行多少其他的程序，自然也不知道activity A是否会被销毁，故系统会调用onSaveInstanceState，让用户有机会保存某些非永久性的数据。以下几种情况的分析都遵循该原则
+
+
+    2、长按HOME键，选择运行其他的程序时。
+
+
+    3、按下电源按键（关闭屏幕显示）时。
+
+
+    4、从activity A中启动一个新的activity时。
+
+
+    5、屏幕方向切换时，例如从竖屏切换到横屏时。
+
+    在屏幕切换之前，系统会销毁activity A，在屏幕切换之后系统又会自动地创建activity A，所以onSaveInstanceState一定会被执行
+
+
+
+    总而言之，onSaveInstanceState的调用遵循一个重要原则，即当系统“未经你许可”时销毁了你的activity，则onSaveInstanceState会被系统调用，这是系统的责任，因为它必须要提供一个机会让你保存你的数据（当然你不保存那就随便你了）。
+
+
+
+
+    至于onRestoreInstanceState方法，需要注意的是，onSaveInstanceState方法和onRestoreInstanceState方法“不一定”是成对的被调用的，onRestoreInstanceState被调用的前提是，activity A“确实”被系统销毁了，而如果仅仅是停留在有这种可能性的情况下，则该方法不会被调用，例如，当正在显示activity A的时候，用户按下HOME键回到主界面，然后用户紧接着又返回到activity A，这种情况下activity A一般不会因为内存的原因被系统销毁，故activity A的onRestoreInstanceState方法不会被执行
+
+
+    另外，onRestoreInstanceState的bundle参数也会传递到onCreate方法中，你也可以选择在onCreate方法中做数据还原
+
+    onRestoreInstanceState(Bundle savedInstanceState)只有在activity确实是被系统回收，重新创建activity的情况下才会被调用。
+
+
+
+
+
+
+
+
+
+
+
+    -->
+
+
+
+
+
+
+</full-backup-content>
