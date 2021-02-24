@@ -11,10 +11,10 @@
         android:orientation="vertical">
 
 
-        <com.mercury.demo.common.RalewayTextView
+        <com.mercury.demo.common.UnderlineRalewayTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textColor="@color/textcolor"
         android:text="@string/text_test"
         android:gravity="center"/>
@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
+
             android:textColor="@color/textcolor"
             android:text="@string/text_test"
             android:gravity="center"/>
@@ -112,8 +113,8 @@
         <com.mercury.demo.view.MyTextView
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:visibility="gone"
-            android:background="@color/color_yellow"/>
+            android:visibility="visible"
+          />
 
 
         <com.mercury.demo.view.PrgressView

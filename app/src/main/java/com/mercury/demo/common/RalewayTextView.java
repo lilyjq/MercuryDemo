@@ -30,4 +30,13 @@ public class RalewayTextView extends AppCompatTextView {
         setTypeface(typeface,Typeface.NORMAL);
     }
 
+    @Override
+    protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
+        super.onTextChanged(text, start, lengthBefore, lengthAfter);
+    }
+
+
+
+
+
 }
