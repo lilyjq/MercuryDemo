@@ -15,8 +15,9 @@ public class PathActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_path);
-        pathView = findViewById(R.id.pathView);
-        pathView.startAnimation(0);
+        setContentView(R.layout.actvity_touch_path);
+//        setContentView(R.layout.activity_path);
+//        pathView = findViewById(R.id.pathView);
+//        pathView.startAnimation(0);
     }
 }

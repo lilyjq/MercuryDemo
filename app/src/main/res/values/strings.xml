@@ -62,4 +62,11 @@
 
     <string name="data_plus">增加一个数据</string>
     <string name="data_minus">减少一个数据</string>
+
+    <string name ="price0">谢谢惠顾！</string>
+    <string name ="price1">想得挺美。</string>
+    <string name ="price2">中奖啦！</string>
+    <string name ="price3">继续努力吧！</string>
+    <string name ="price4">下次一定</string>
+
 </resources>
