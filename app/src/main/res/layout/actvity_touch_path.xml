@@ -22,7 +22,7 @@
     </com.mercury.demo.view.AnimWaveView>-->
 
 
-    <com.mercury.demo.view.TelescopeView
+<!--    <com.mercury.demo.view.TelescopeView
 
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -30,7 +30,17 @@
 
 
 
-    </com.mercury.demo.view.TelescopeView>
+    </com.mercury.demo.view.TelescopeView>-->
+
+    <com.mercury.demo.view.ScratchCardView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+
+    </com.mercury.demo.view.ScratchCardView>
 
 
 

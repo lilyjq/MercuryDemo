@@ -24,6 +24,14 @@ class EmptyView {
      *    LinearGradient 先行渐变
      *    RadialGradient 放射渐变
      *
+     *    图片绘制增大
+     *    //TelescopeView
+     *     Canvas canvas1 = new Canvas(mBitmapBg);
+     *     canvas1.drawBitmap(mBitmap,null,new Rect(0,0,getWidth(),getHeight()),mPaint);
+     *
+     * // Metrax
+     *
+     *
      *    xfermode
      *    paint.setXfermode()
      *    1-> 禁用硬件加速
