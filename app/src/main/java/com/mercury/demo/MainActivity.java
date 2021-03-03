@@ -13,6 +13,7 @@ import com.mercury.demo.aty.PathActivity;
 import com.mercury.demo.aty.ProgressActivity;
 import com.mercury.demo.aty.RadarViewActivity;
 import com.mercury.demo.aty.TestLayoutActivity;
+import com.mercury.demo.aty.WaterMaskActivity;
 import com.mercury.demo.banner.BannerActivity;
 import com.mercury.demo.behavior.CoordinateActivity;
 import com.mercury.demo.camera.AvatarActivity;
@@ -91,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
                 break;
             case 10:
                 startActivity(new Intent(this, TransitionActivity.class));
+                break;
+            case 11:
+                startActivity(new Intent(this, WaterMaskActivity.class));
                 break;
             default:
                 break;

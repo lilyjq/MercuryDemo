@@ -28,6 +28,7 @@ public class RadarView extends View {
     private int size = 5;
     private int lineSize = 5;
 
+    //PathDashPathEffect DiscretePathEffect
     private CornerPathEffect effect;
     private Paint textpaint;
     private int max = 10;

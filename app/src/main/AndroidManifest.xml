@@ -78,6 +78,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/TransTheme"/>
 
+        <activity android:name=".aty.WaterMaskActivity"
+            android:screenOrientation="portrait"/>
+
+
 
     </application>
 

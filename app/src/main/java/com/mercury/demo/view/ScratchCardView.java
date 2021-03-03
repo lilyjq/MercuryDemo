@@ -61,6 +61,7 @@ class ScratchCardView extends View {
 
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
         textPaint.setColor(Color.GRAY);
         textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         textPaint.setTextSize(DisplayUtil.dp2px(28));
