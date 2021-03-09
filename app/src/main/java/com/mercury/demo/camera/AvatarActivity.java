@@ -59,6 +59,13 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
     private int RC_OPENCAMRA = 102;
 
 
+    /**
+     * Android调用系统相机会遇到的两大问题：
+     *
+     * 1.指定存储图片路径，Android7.0及之后的机型调用系统相机会抛出android.os.FileUriExposedException异常
+     * 2.指定存储图片路径，调用系统相机返回 intent 为：null
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

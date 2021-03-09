@@ -7,11 +7,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.mercury.MainAdapter;
 import com.mercury.demo.aty.NoticeActivity;
 import com.mercury.demo.aty.PathActivity;
 import com.mercury.demo.aty.ProgressActivity;
 import com.mercury.demo.aty.RadarViewActivity;
+import com.mercury.demo.aty.SnackbarTestActivity;
 import com.mercury.demo.aty.TestLayoutActivity;
 import com.mercury.demo.aty.WaterMaskActivity;
 import com.mercury.demo.banner.BannerActivity;
@@ -95,6 +98,9 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
                 break;
             case 11:
                 startActivity(new Intent(this, WaterMaskActivity.class));
+                break;
+            case 12:
+                startActivity(new Intent(this, SnackbarTestActivity.class));
                 break;
             default:
                 break;

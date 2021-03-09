@@ -15,6 +15,7 @@
     <string name="motion">MotionLayout</string>
     <string name="transition">Transition</string>
     <string name="watermask">watermask</string>
+    <string name="snackbar">Snackbar</string>
     <string name="text_test">君不见黄河之水天上来，奔流到海不复回。</string>
     <string name="test_transformPivot">transformPivotX transformPivotY</string>
 

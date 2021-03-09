@@ -3,12 +3,15 @@ package com.mercury.demo.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.drawable.ShapeDrawable;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 
 import com.mercury.demo.R;
 
-class EmptyView extends View {
+class EmptyView extends SurfaceView {
 
     public EmptyView(Context context) {
         super(context);
@@ -103,9 +106,68 @@ class EmptyView extends View {
      * quility 1-100 0 最低像素压缩 无损的压缩忽略改值
      * stream 输出
      * 返回boolean 压缩是否成功
+     *
+     *1. 问题 缓存问题、如何加载巨大图片、LRU
+     * SurfaceView
+     * 使用双缓冲技术
+     * 自带画布，支持在子线程更新画布内容
+     *
+     * 应用场景：
+     * view 当页面需要被动更新时，比如首饰交互
+     * surfaceview 页面主动更新 比如一个人一直跑 需要一直重绘状态 避免阻塞线程
+     * 当页面绘制需要频繁刷新，或刷新是数据处理量比较大时 比如视频播放以及s摄像头 camera
+     *
+     *
      */
 
+    private void init(){
+        SurfaceHolder surfaceHolder = getHolder();
+        surfaceHolder.addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
 
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+
+            }
+        });
+        surfaceHolder.addCallback(new SurfaceHolder.Callback2() {
+            @Override
+            public void surfaceRedrawNeeded(SurfaceHolder holder) {
+
+            }
+
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+
+            }
+        });
+        Canvas canvas = surfaceHolder.lockCanvas();
+
+
+        //TODO 绘图操作
+        surfaceHolder.unlockCanvasAndPost(canvas);
+        //当画布被其它线程锁定的时候 或者缓存canvas没有被创建的时候，surfaceHolder.lockCanvas会返回null
+        //这样一来如果多个线程同时操作那么不仅要对画布做判空还要再画布为null的时候添加重试策略。
+
+    }
     private void test(){
 
 
@@ -121,6 +183,8 @@ class EmptyView extends View {
 
 
     }
+
+
 
 
 }

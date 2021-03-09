@@ -40,6 +40,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         list.add(context.getString(R.string.motion));
         list.add(context.getString(R.string.transition));
         list.add(context.getString(R.string.watermask));
+        list.add(context.getString(R.string.snackbar));
         notifyDataSetChanged();
     }
 

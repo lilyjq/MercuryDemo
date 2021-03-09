@@ -81,6 +81,9 @@
         <activity android:name=".aty.WaterMaskActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".aty.SnackbarTestActivity"
+            android:screenOrientation="portrait"/>
+
 
 
     </application>
