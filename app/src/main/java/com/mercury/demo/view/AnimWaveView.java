@@ -1,13 +1,18 @@
 package com.mercury.demo.view;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
+import android.text.BoringLayout;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.Nullable;
@@ -90,8 +95,8 @@ class AnimWaveView extends View {
 
         animator.start();
 
-        ValueAnimator animator1 = ValueAnimator.ofInt( 1000,100);
-        animator1.setDuration(8000);
+        ValueAnimator animator1 = ValueAnimator.ofInt(get(),100);
+        animator1.setDuration(18000);
         animator1.setInterpolator(new LinearInterpolator());
         animator1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -103,4 +108,24 @@ class AnimWaveView extends View {
         animator1.start();
 
     }
+
+/*    public int getScreenWidth(Context context){
+        Point point=new Point();
+        getDisplay(g).getRealSize(point);
+        return point.x;
+        //return point.y;
+    }
+
+    public  void getDispaly(Activity activity){
+
+        activity.getWindowManager().getDefaultDisplay();
+    }*/
+
+    public  int  get(){
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        return  display.getHeight();
+    }
+
+
 }

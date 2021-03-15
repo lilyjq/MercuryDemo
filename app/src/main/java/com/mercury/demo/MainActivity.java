@@ -6,7 +6,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.mercury.MainAdapter;
@@ -105,6 +109,27 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
             default:
                 break;
         }
+        Handler handler = new Handler(getMainLooper());
 
     }
+
+    /**
+     * 判断是Navigationbar 是否显示 有的手机可以缩回
+     * mBottomView 页面最底部的view
+     */
+/*    private void setBottomHeight(){
+        mBotoomView.post(new Runnable() {
+            @Override
+            public void run() {
+                Rect rect = new Rect();
+                mBotoomView.getGlobalVisibleRect(rect);
+                DisplayMetrics outMetrics = new DisplayMetrics();
+                WindowManager windowManager = getWindowManager();
+                windowManager.getDefaultDisplay().getRealMetrics(outMetrics);
+                boolean navigationBarShow = rect.bottom < outMetrics.heightPixels;
+                SubToastUtil.setIsNavigationShow(navigationBarShow);
+            }
+        });
+
+    }*/
 }
