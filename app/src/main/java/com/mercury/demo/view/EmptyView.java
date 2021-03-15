@@ -5,9 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.ShapeDrawable;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.mercury.demo.R;
 
@@ -200,6 +203,25 @@ class EmptyView extends SurfaceView {
 
         Bitmap bitmap1 = Bitmap.createBitmap(100,100, Bitmap.Config.ARGB_8888);//100*100的空白图片
 
+
+
+        //手势检测
+        //1 创建实例 OnGestureListener
+        //2 创建 GestureDetector
+        //3 在ontouch 中进行拦截
+
+        TextView tv = null;
+        GestureDetector detector = new GestureDetector(getContext(),new MyGesture());
+        tv.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return detector.onTouchEvent(event);
+            }
+        });
+
+        GestureDetector.OnDoubleTapListener listener; //implment
+        GestureDetector.SimpleOnGestureListener simpleOnGestureListener; //extends 简化版 用哪个函数就重写哪个函数
+        //onFiling
 
     }
 
