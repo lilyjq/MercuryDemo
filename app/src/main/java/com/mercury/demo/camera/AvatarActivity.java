@@ -1,17 +1,19 @@
 package com.mercury.demo.camera;
 
 import android.Manifest;
-import android.app.Activity;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.RecoverableSecurityException;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +37,7 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Logger;
@@ -43,6 +46,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -53,10 +57,10 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
     TextView mTakePhotoTv;
     TextView mOpenAblumTv;
     TextView mClearSpTv;
-    private String dbName = "data";
-    private String dbAvatarKey = "avatar";
-    private int RC_OPENABLUM = 101;
-    private int RC_OPENCAMRA = 102;
+    private final String dbName = "data";
+    private final String dbAvatarKey = "avatar";
+    private final int RC_OPENABLUM = 101;
+    private final int RC_OPENCAMRA = 102;
 
 
     /**
@@ -64,7 +68,7 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
      *
      * 1.指定存储图片路径，Android7.0及之后的机型调用系统相机会抛出android.os.FileUriExposedException异常
      * 2.指定存储图片路径，调用系统相机返回 intent 为：null
-     * @param savedInstanceState
+     *
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,6 +90,11 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
 //storage/emulated/0/DCIM/Camera/20200803_184740.jpg
         ///storage/emulated/0/Pictures/_Mon Aug 03 17_57_55 GMT+08_00 2020_report.jpg
 //        getImageUriByName("_Mon Aug 03 17_57_55 GMT+08_00 2020_report.jpg");
+
+
+        getImageUriByName(1762);
+       init();
+       init2();
 
 
         mOpenAblumTv.setOnClickListener(this);
@@ -121,6 +130,7 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -194,13 +204,13 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 photoUri = createQUri();
             } else {
-                if (tempFile != null) {
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         photoUri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", tempFile);
                     } else {
                         photoUri = Uri.fromFile(tempFile);
                     }
-                }
+
             }
             if (photoUri != null) {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
@@ -223,13 +233,17 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
         else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
             data = uri.getPath();
         } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
-            Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
+            Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.ImageColumns.DATA,MediaStore.Images.Media._ID,MediaStore.Images.Media.DISPLAY_NAME,MediaStore.Images.Media.RELATIVE_PATH}, null, null, null);
             if (null != cursor) {
                 if (cursor.moveToFirst()) {
                     int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
                     if (index > -1) {
                         data = cursor.getString(index);
                     }
+
+                    String id = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media._ID));
+                    String dis = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
+                    String re = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.RELATIVE_PATH));
                 }
                 cursor.close();
             }
@@ -334,13 +348,40 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
         } else if (resultCode == RESULT_OK && requestCode == RC_OPENABLUM) {
 //            Bitmap bitmap = getBitmapFromUri(data.getData());
             String path = ImageUtil.getRealPathFromUri(this, data.getData());
-            Log.e("eeee    path",path);
+//            Log.e("eeee    path",);
+//            get(path);
             Log.e("eeee    uri",data.getData().toString());
             Log.e("eeee    uri path",data.getData().getPath());
+            Log.e("eeee    geturipath",getFilePath(this,data.getData()));
+//            Log.e("eeee  getMediaUri ",getMediaUriFromPath(path).toString());
+            Log.e("eeee  getpath ",getFilePath(this,data.getData()));
             savaPath(path);
             Glide.with(this).load(data.getData()).apply(RequestOptions.bitmapTransform(new CircleCrop())).placeholder(R.drawable.u).into(mAvatar);
         }
     }
+
+/*    private void get(String filepath){
+        Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA, MediaStore.Images.Media.MIME_TYPE},
+                MediaStore.Images.Media.DATA+ "=?",
+                new String[]{filepath},
+                null);
+        if(cursor!= null && cursor.moveToFirst()){
+            do {
+                //一张图片的基本信息
+                int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));//uri的id，用于获取图片
+                String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.RELATIVE_PATH));//图片的相对路径
+                String type = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE));//图片类型
+                String name = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));//图片名字
+                //根据图片id获取uri，这里的操作是拼接uri
+                Uri uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id);
+                //官方代码：
+                Uri contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+            }while (cursor.moveToNext());
+        }
+        if (cursor != null)
+            cursor.close();
+    }*/
 
     private void openAblum() {
         Intent intent;
@@ -410,24 +451,59 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
      * @param name name
      */
 
-    private void getImageUriByName(String name){
+    private void getImageUriByName(int name){
         ContentResolver resolver = getContentResolver();
         if(resolver != null) {
             Cursor cursor = resolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null,
-                    MediaStore.Images.Media.DISPLAY_NAME + "=?", new String[]{name}, null);
+                    MediaStore.Images.Media._ID + "=?", new String[]{name+""}, null);
             if(cursor!= null && cursor.moveToFirst()){
-                int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+//                int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
                 String path =cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.RELATIVE_PATH));
-                Uri uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,id+"");
+//                Uri uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,id+"");
                 Log.e("eeeepath",path);
-                Log.e("eeeeuri",uri.toString());
+//                Log.e("eeeeuri",uri.toString());
                 cursor.close();
-                Glide.with(this).load(uri).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.u).into(mAvatar);
+//                Glide.with(this).load(uri).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.u).into(mAvatar);
             }
+            if(cursor != null )
+                cursor.close();
 
         }
 
+
+
+
     }
+
+    /**
+     * 如果没有n拿到写出权限在只能拿到picture的图片
+     */
+    private void init(){
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        ContentResolver resolver = getContentResolver();
+        Cursor query = resolver.query(uri,new String[]{
+                MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media.DISPLAY_NAME,
+                MediaStore.Images.Media.DATE_ADDED,
+                MediaStore.Images.Media._ID},null,null,null,null);
+        while(query.moveToNext()) {
+            Log.e("eeeeee",query.getString(0));
+            //这里的下标跟上面的query第一个参数对应，时间是第2个，所以下标为1
+//            Log.e("eeeeee", String.valueOf(query.getLong(1)));
+//            Log.e("eeeeee",query.getString(2));
+//            Log.e("eeeeee", String.valueOf(query.getInt(query.getColumnIndex(MediaStore.MediaColumns._ID))));
+        }
+        query.close();
+    }
+
+
+
+    private void getStroageVolumes(){
+        File[] externalStorageVolumes = ContextCompat.getExternalFilesDirs(getApplicationContext(),null);
+        File primaryExternalStorage = externalStorageVolumes[0];
+    }
+
+
 
     /**
      * 根据uri 获取图片的bitmap
@@ -451,12 +527,53 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    private void dealPic(String path, Intent data) {
-
-
-//
-
+    @TargetApi(29)
+    public void deleteUri(Uri imageUri) {
+        ContentResolver resolver = getContentResolver();
+        OutputStream os = null;
+        try {
+            if (imageUri != null) {
+                resolver.delete(imageUri,null,null);
+            }
+        } catch (RecoverableSecurityException e1) {
+            Log.d("","get RecoverableSecurityException");
+            try {
+                this.startIntentSenderForResult(
+                        e1.getUserAction().getActionIntent().getIntentSender(),
+                        100, null, 0, 0, 0);
+            } catch (IntentSender.SendIntentException e2) {
+                Log.d("","startIntentSender fail");
+            }
+        }
     }
 
+
+    private void init2(){
+        Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        String[] proj = {
+                MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA, MediaStore.Images.Media.BUCKET_ID, MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATE_MODIFIED};
+        Cursor cursor;
+
+            cursor = getContentResolver().query(imageUri, proj, null, null,MediaStore.Images.Media.DATE_MODIFIED + " DESC");
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                long id = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media._ID));
+                String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                long buckId = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID));
+                String buckName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME));
+                long dateModified = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED));
+                if (!TextUtils.isEmpty(buckName)) {
+
+                }
+//                Log.e("aaaaaa  id", String.valueOf(id));
+                Log.e("aaaaaa   path",path);
+//                Log.e("aaaaaa   buckId", String.valueOf(buckId));
+//                Log.e("aaaaaa  buckName",buckName);
+//                Log.e("aaaaaa dateModified", String.valueOf(dateModified));
+            }
+            cursor.close();
+        }
+    }
 
 }
