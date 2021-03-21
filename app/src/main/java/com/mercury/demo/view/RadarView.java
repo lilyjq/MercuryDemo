@@ -1,5 +1,6 @@
 package com.mercury.demo.view;
 
+import android.accessibilityservice.AccessibilityService;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -75,6 +76,7 @@ public class RadarView extends View {
     }
 
     private void init(Context context){
+        setLayerType(LAYER_TYPE_SOFTWARE,null);//paint.setPathEffect 不支持硬件加速所以禁用硬件加速
         paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(lineColor);

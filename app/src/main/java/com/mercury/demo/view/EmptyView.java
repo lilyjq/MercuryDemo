@@ -5,9 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.ShapeDrawable;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.mercury.demo.R;
 
@@ -18,6 +21,11 @@ class EmptyView extends SurfaceView {
     }
 
     /**
+     *
+     * 绘制文字
+     *
+     * Paint.FontMetricsInt fm = paint.getFontMetricsInt()
+     * fm.top = top-baseline
      * 阴影
      * paint.setshadowlayout
      * paint.clearShadow
@@ -27,6 +35,8 @@ class EmptyView extends SurfaceView {
      *
      * paint.setMaskFilter
      * BulrMaskFilter 、、发光效果 图片阴影
+     * new BlurMaskFilter(50,BlurMaskFilter.Blur.NORMAL)//边缘发光半径，发光类型
+     * Blur.INNER 内 Blur.SOlID 外 NORMAL 内外发光 OUT 仅显示发光效果其他透明
      *
      * bitmap.extractAlphna 新建一张和bitmap 一样的alpha值 空白图片
      *
@@ -38,6 +48,12 @@ class EmptyView extends SurfaceView {
      *    bitmapShader 类似于印章   可以用于展示部分图片
      *    LinearGradient 先行渐变
      *    RadialGradient 放射渐变
+     *
+     *  new BitmapSharder(bitmap,Shader.TileMode.CLAMP,Shader.TileMode.CLAMP)//图片 x轴模式 y
+     *
+     *    TileMode.CLAMP
+     *    TileMode.REPEAT
+     *    TileMode.MIRROR
      *
      *    图片绘制增大
      *    //TelescopeView
@@ -72,6 +88,10 @@ class EmptyView extends SurfaceView {
      * SRC_IN 倒影效果
      * SRC_OUT 橡皮擦 当目标图像有图像时结果显示空白像素，如果目标图像没有像素时显示源图像
      *
+     *canvas.save
+     * canvas.savelayout 会创建一个新的图层
+     * restore 或restoretocount 回到原图层
+     *
      *
      * drawable shape便签对应的是GradientDrawable
      *
@@ -89,6 +109,8 @@ class EmptyView extends SurfaceView {
      * 1.inJustDecodeBounds 获取图片信息 不分配内存 长宽 MIME 类型
      * options.outWidth options.outHeight
      * 2.inSampleSize 压缩图片 采样率 越大 图片大小越小 约模糊
+     *
+     * 缩放比例 = 屏幕分辩率/w文件夹所在的分辨率
      *
      *
      * imageview.setstateDrawable(Imageview v,Paint p)//主要作用用于向imageview添加背景
@@ -181,6 +203,25 @@ class EmptyView extends SurfaceView {
 
         Bitmap bitmap1 = Bitmap.createBitmap(100,100, Bitmap.Config.ARGB_8888);//100*100的空白图片
 
+
+
+        //手势检测
+        //1 创建实例 OnGestureListener
+        //2 创建 GestureDetector
+        //3 在ontouch 中进行拦截
+
+        TextView tv = null;
+        GestureDetector detector = new GestureDetector(getContext(),new MyGesture());
+        tv.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return detector.onTouchEvent(event);
+            }
+        });
+
+        GestureDetector.OnDoubleTapListener listener; //implment
+        GestureDetector.SimpleOnGestureListener simpleOnGestureListener; //extends 简化版 用哪个函数就重写哪个函数
+        //onFiling
 
     }
 
