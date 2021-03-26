@@ -14,6 +14,7 @@ import android.view.WindowManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.mercury.MainAdapter;
+import com.mercury.demo.aty.HookTestActivity;
 import com.mercury.demo.aty.NoticeActivity;
 import com.mercury.demo.aty.PathActivity;
 import com.mercury.demo.aty.ProgressActivity;
@@ -105,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
                 break;
             case 12:
                 startActivity(new Intent(this, SnackbarTestActivity.class));
+                break;
+            case 13:
+                startActivity(new Intent(this, HookTestActivity.class));
                 break;
             default:
                 break;

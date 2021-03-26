@@ -25,7 +25,7 @@ class ScratchCardView extends View {
 
     private String text  = getResources().getString(R.string.price0)   ;
     private Paint mBitPaint,textPaint;
-    private Bitmap srcBmp, dstBmp,BmpText;
+    private Bitmap srcBmp, dstBmp;
     private Path mPath;
 
    //SRC_OUT 橡皮擦 当目标图像有图像时结果显示空白像素，如果目标图像没有像素时显示源图像

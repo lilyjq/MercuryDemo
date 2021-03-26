@@ -84,6 +84,9 @@
         <activity android:name=".aty.SnackbarTestActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".aty.HookTestActivity"
+            android:screenOrientation="portrait"/>
+
 
 
     </application>
