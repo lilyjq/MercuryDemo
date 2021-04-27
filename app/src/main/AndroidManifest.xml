@@ -86,6 +86,8 @@
 
         <activity android:name=".aty.HookTestActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".aty.VideoActivity"
+            android:screenOrientation="portrait"/>
 
 
 

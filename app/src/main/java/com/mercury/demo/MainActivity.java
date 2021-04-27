@@ -1,36 +1,40 @@
 package com.mercury.demo;
 
+import androidx.annotation.IntDef;
+import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.DisplayMetrics;
-import android.view.WindowManager;
+import android.widget.ImageView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.mercury.MainAdapter;
-import com.mercury.demo.aty.HookTestActivity;
 import com.mercury.demo.aty.NoticeActivity;
 import com.mercury.demo.aty.PathActivity;
 import com.mercury.demo.aty.ProgressActivity;
 import com.mercury.demo.aty.RadarViewActivity;
 import com.mercury.demo.aty.SnackbarTestActivity;
 import com.mercury.demo.aty.TestLayoutActivity;
+import com.mercury.demo.aty.VideoActivity;
 import com.mercury.demo.aty.WaterMaskActivity;
-import com.mercury.demo.banner.BannerActivity;
 import com.mercury.demo.behavior.CoordinateActivity;
 import com.mercury.demo.camera.AvatarActivity;
-import com.mercury.demo.motionlayout.MotionTestActivity;
 import com.mercury.demo.motionlayout.YouTubeActivity;
 import com.mercury.demo.scrollcut.ScrollCutAcitivty;
 import com.mercury.demo.transition.TransitionActivity;
 import com.mercury.demo.util.HomeWatcherReceiver;
 import com.mercury.demo.viewpager.TabHostActivity;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 
 public class MainActivity extends AppCompatActivity implements MainAdapter.onItemClickListenr {
@@ -108,7 +112,9 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
                 startActivity(new Intent(this, SnackbarTestActivity.class));
                 break;
             case 13:
-                startActivity(new Intent(this, HookTestActivity.class));
+                startActivity(new Intent(this, VideoActivity.class));
+                break;
+            case 14:
                 break;
             default:
                 break;
@@ -136,4 +142,52 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
         });
 
     }*/
+
+    @SuppressLint("SupportAnnotationUsage")
+    @RequiresPermission(anyOf = {Manifest.permission.ACCESS_NETWORK_STATE,Manifest.permission.BATTERY_STATS})
+    private void requestPermission(){
+
+    }
+    public static final int TYPE_ONE = 10;
+    public static final int TYPE_K = 101;
+    public static final int TYPE_O = 88;
+
+    /**
+     * https://www.cnblogs.com/whoislcj/p/5677917.html
+     */
+    @IntDef({TYPE_ONE, TYPE_K, TYPE_O})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Animation{
+
+    }
+
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({TYPE_ONE, TYPE_K, TYPE_O})
+    public @interface ResizeMode {
+    }
+
+
+    @FindViewById(R.id.recycler)
+    ImageView iv;
+    @setOnCLickListenter(id = R.id.recycler,methodName = "click")
+    ImageView imageView;
+
+    void click(){
+
+    }
+
+    @Target(ElementType.FIELD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface FindViewById{
+        int value();
+    }
+
+
+    @Target(ElementType.FIELD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface setOnCLickListenter{
+        int id();
+        String methodName();
+    }
 }

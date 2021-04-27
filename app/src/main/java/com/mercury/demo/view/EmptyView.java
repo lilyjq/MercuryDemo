@@ -12,7 +12,15 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.IntDef;
+import androidx.annotation.Keep;
+
 import com.mercury.demo.R;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 class EmptyView extends SurfaceView {
 
@@ -40,7 +48,7 @@ class EmptyView extends SurfaceView {
      *
      * bitmap.extractAlphna 新建一张和bitmap 一样的alpha值 空白图片
      *
-     * setLayerType(LAYER_TYPE_SOFTWARE，null) 禁用硬件加速
+     * setLayerType(LAYER_TYPE_SOFTWARE，null) 禁用硬件加速 会导致view重绘 原因未知
      *
      * shader 着色器
      *
@@ -65,7 +73,7 @@ class EmptyView extends SurfaceView {
      *
      *    xfermode
      *    paint.setXfermode()
-     *    1-> 禁用硬件加速
+     *    1-> 禁用硬件加速 （部分代码不能使用硬件加速）
      *    2-> 使用离屏绘制
      *    //新建图层
      *    int layoutId = canvas.savelayer(0,0,getwidth(),getHeight(),null,Canvas.ALL_SAVE_FLAG);

@@ -1,15 +1,25 @@
 package com.mercury.demo.t;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mercury.demo.R;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 
-class MainActivity  extends AppCompatActivity {
+class MainActivity extends AppCompatActivity {
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
@@ -35,5 +45,68 @@ class MainActivity  extends AppCompatActivity {
 //        报错 ，只能写入 不能获取 要强转 容易报错
 //        list.add(new Furit());
 
+        MySyncTask task = new MySyncTask();
+        task.execute("sss");
+        setContentView(R.layout.acrivity_watermask);
     }
+
+
+
+
+    class MySyncTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+    }
+
+
+    private void heapSort(int[] array) {
+        for(int i = (array.length-2)/2;i>=0;i++){
+            downAdjust(array,i,array.length);
+        }
+
+    }
+
+    void downAdjust(int[] array, int parentIndex, int length) {
+        int temp = array[parentIndex];
+        int chileIndex = 2 * parentIndex + 1;
+        while (chileIndex < length) {
+            if (chileIndex + 1 < length && array[chileIndex + 1] > array[chileIndex]) {
+                chileIndex++;
+            }
+
+            if (temp >= array[chileIndex])
+                break;
+            array[parentIndex] = array[chileIndex];
+            parentIndex = chileIndex;
+            chileIndex = chileIndex * 2 + 1;
+        }
+        array[parentIndex] = temp;
+    }
+
+
+
 }
+

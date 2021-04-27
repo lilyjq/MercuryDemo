@@ -3,6 +3,7 @@ package com.mercury.demo.camera;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Application;
 import android.app.RecoverableSecurityException;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -18,6 +19,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.FileUtils;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -36,6 +38,7 @@ import com.mercury.demo.util.ImageUtil;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Calendar;
@@ -48,6 +51,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+
+import io.reactivex.Observable;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class AvatarActivity extends AppCompatActivity implements View.OnClickListener, EasyPermissions.PermissionCallbacks {
@@ -69,6 +74,7 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
      * 1.指定存储图片路径，Android7.0及之后的机型调用系统相机会抛出android.os.FileUriExposedException异常
      * 2.指定存储图片路径，调用系统相机返回 intent 为：null
      *
+     * android10 的系统 如果在
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -518,6 +524,9 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
             ParcelFileDescriptor parcelFileDescriptor = getContentResolver().openFileDescriptor(uri, "r");
             FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
             Bitmap bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+            androidx.exifinterface.media.ExifInterface exifInterface = new androidx.exifinterface.media.ExifInterface(String.valueOf(fileDescriptor));
+            int width = exifInterface.getAttributeInt(androidx.exifinterface.media.ExifInterface.TAG_IMAGE_WIDTH, 0);
+            int height = exifInterface.getAttributeInt(androidx.exifinterface.media.ExifInterface.TAG_IMAGE_LENGTH, 0);
             parcelFileDescriptor.close();
             return bitmap;
         } catch (IOException e) {
@@ -576,4 +585,59 @@ public class AvatarActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    public static boolean saveGif(String filemane, Application context, byte[] gif) {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Files.FileColumns.DISPLAY_NAME, filemane);
+        values.put(MediaStore.Files.FileColumns.MIME_TYPE, "image/gif");//MediaStore对应类型名
+        values.put(MediaStore.Files.FileColumns.TITLE, filemane);
+        ContentResolver resolver = context.getContentResolver();
+        Uri insertUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        OutputStream ost = null;
+        try {
+            if (insertUri != null) {
+                ost = resolver.openOutputStream(insertUri);
+                if (ost != null) {
+                    ost.write(gif);
+                    ost.flush();
+                    ost.close();
+
+                }
+                return false;
+            } else {
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ost != null) {
+                    ost.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
+
+  /*  private Observable<String> savefile() {
+        return Observable.create(emitter -> {
+            try {
+                String fileName = "giff.gif";
+                File file = new File(""+ "/" + fileName);
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    FileOutputStream outStream = new FileOutputStream(file);
+                    outStream.write(byte);
+                    outStream.close();
+                    emitter.onNext(file.getAbsolutePath());
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                emitter.onError(e);
+            }
+            emitter.onComplete();
+        });
+    }
+*/
 }
