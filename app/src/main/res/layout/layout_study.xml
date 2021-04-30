@@ -122,6 +122,16 @@
             android:layout_height="200dp"
             android:layout_gravity="center"/>
 
+        <com.mercury.demo.view.BlackAndWhiteView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/u"/>
+
+
+        <com.mercury.demo.view.OldPicView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fj1"/>
 
     </LinearLayout>
 
