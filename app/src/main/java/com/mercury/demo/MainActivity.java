@@ -21,7 +21,7 @@ import com.mercury.demo.aty.ProgressActivity;
 import com.mercury.demo.aty.RadarViewActivity;
 import com.mercury.demo.aty.SnackbarTestActivity;
 import com.mercury.demo.aty.TestLayoutActivity;
-import com.mercury.demo.aty.VideoActivity;
+import com.mercury.demo.video.VideoActivity;
 import com.mercury.demo.aty.WaterMaskActivity;
 import com.mercury.demo.behavior.CoordinateActivity;
 import com.mercury.demo.camera.AvatarActivity;
@@ -168,13 +168,21 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
     }
 
 
+    @SuppressLint("UniqueConstants")
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef()
+    public @interface MY {
+        int TYPE_1 = 1;
+        int TYPE_2 = 1;
+        int TYPE_3 = 1;
+    }
+
     @FindViewById(R.id.recycler)
     ImageView iv;
     @setOnCLickListenter(id = R.id.recycler,methodName = "click")
     ImageView imageView;
 
     void click(){
-
     }
 
     @Target(ElementType.FIELD)
