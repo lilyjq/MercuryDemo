@@ -234,6 +234,8 @@ class EmptyView extends SurfaceView {
     }
 
 
-
+/**
+ * 一个可以循环的recyclerview 再加上一个indicator
+ */
 
 }

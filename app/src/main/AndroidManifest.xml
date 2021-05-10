@@ -92,6 +92,8 @@
         <activity android:name=".video.VideoActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".video.Video2Activity"
+            android:screenOrientation="portrait"/>
 
 
     </application>

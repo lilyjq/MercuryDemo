@@ -21,6 +21,7 @@ import com.mercury.demo.aty.ProgressActivity;
 import com.mercury.demo.aty.RadarViewActivity;
 import com.mercury.demo.aty.SnackbarTestActivity;
 import com.mercury.demo.aty.TestLayoutActivity;
+import com.mercury.demo.video.Video2Activity;
 import com.mercury.demo.video.VideoActivity;
 import com.mercury.demo.aty.WaterMaskActivity;
 import com.mercury.demo.behavior.CoordinateActivity;
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.onIte
                 startActivity(new Intent(this, SnackbarTestActivity.class));
                 break;
             case 13:
-                startActivity(new Intent(this, VideoActivity.class));
+                startActivity(new Intent(this, Video2Activity.class));
                 break;
             case 14:
                 break;

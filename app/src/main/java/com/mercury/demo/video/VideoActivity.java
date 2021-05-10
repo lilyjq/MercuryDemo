@@ -36,6 +36,10 @@ public class VideoActivity extends AppCompatActivity {
 
     /**
      * 1\MediaController+VideoView实现方式
+     * 视频多大  videoview无法控制其大小 mm方式可以控制其全屏 但 直接设置其高度无效
+     *
+     *
+     *
      * 2\MediaPlayer+SurfaceView+自定义控制器
      * 3\MediaPlayer+SurfaceView+MediaController
      */
