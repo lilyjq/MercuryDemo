@@ -7,8 +7,6 @@ import com.mercury.demo.viewpager.ListItemAdapter;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class CoordinateActivity extends AppCompatActivity {
 
