@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.PathDashPathEffect;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.mercury.demo.R;
@@ -45,7 +46,7 @@ public class MyTextView extends View {
 
         linePaint = new Paint();
         linePaint.setStyle(Paint.Style.STROKE);
-        linePaint.setStrokeWidth(1);
+        linePaint.setStrokeWidth(10);
         linePaint.setColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
         linePaint.setStrokeCap(Paint.Cap.ROUND);
 //        linePaint.setPathEffect(new DashPathEffect())

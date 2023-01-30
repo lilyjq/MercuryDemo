@@ -111,4 +111,8 @@ class MyTouchView extends View {
         canvas.drawPoint(x0,y0,paint);
         canvas.drawPoint(x1,y1,paint);
     }
+
+    @Override public void draw(Canvas canvas) {
+        super.draw(canvas);
+    }
 }

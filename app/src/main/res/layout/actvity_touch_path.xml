@@ -5,16 +5,16 @@
     android:layout_height="match_parent">
 
 
-<!--    <com.mercury.demo.view.MyTouchView
+    <com.mercury.demo.view.MyTouchView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </com.mercury.demo.view.MyTouchView>-->
+    </com.mercury.demo.view.MyTouchView>
 
 
-    <com.mercury.demo.view.AnimWaveView
+<!--    <com.mercury.demo.view.AnimWaveView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </com.mercury.demo.view.AnimWaveView>
+    </com.mercury.demo.view.AnimWaveView>-->
 
 
 <!--    <com.mercury.demo.view.TelescopeView2

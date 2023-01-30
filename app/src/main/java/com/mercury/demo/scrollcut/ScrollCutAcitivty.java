@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 
 import com.mercury.demo.R;
 
+import io.apptik.widget.MultiSlider;
 import java.util.logging.Logger;
 
 import androidx.annotation.Nullable;
@@ -48,6 +50,11 @@ public class ScrollCutAcitivty extends AppCompatActivity {
 
             }
         });
+        imageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
         //暂时没有解决因为重绘导致scrollline回原点的办法
         scrollLineView2.setChangeListener(new ScrollLineView02.ChangeListener() {
             @Override
@@ -62,6 +69,7 @@ public class ScrollCutAcitivty extends AppCompatActivity {
 //                }
             }
         });
+        //MultiSlider
     }
 
 

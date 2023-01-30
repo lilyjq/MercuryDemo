@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mercury.demo.R;
-import com.youth.banner.Banner;
 
 import java.util.List;
 
