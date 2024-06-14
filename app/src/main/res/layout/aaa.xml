@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:background="?attr/colorPrimary">
 
 <!--    <View
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background=""/>-->
+
+  <com.mercury.demo.view.Mytestview
+      android:id="@+id/tv"
+      android:text="2"
+      android:layout_gravity="center"
+      android:gravity="center"
+      android:textColor="@android:color/white"
+      android:padding="20dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
 
 </LinearLayout>

@@ -29,4 +29,11 @@
     </declare-styleable>
 
 
+    <declare-styleable name="LinearCoordinateLayout">
+
+        <attr name="custom_layout_behavior" format="string"/>
+
+    </declare-styleable>
+
+
 </resources>

@@ -3,7 +3,8 @@ package com.mercury.demo.rxjava;
 import android.app.Activity;
 import android.os.Bundle;
 
-
+import io.reactivex.Notification;
+import io.reactivex.functions.BooleanSupplier;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -134,5 +135,64 @@ public class RxJavaActivity extends Activity {
 //                .map(new Function<LoveReulst, String>() {
 //                })
 
+
+    Disposable disposable1 =  Observable.just("22","ee","maliao").repeat(3).observeOn(Schedulers.io())
+          .subscribeOn(AndroidSchedulers.mainThread())
+          .subscribe(new Consumer<String>() {
+            @Override public void accept(String s) throws Exception {
+
+            }
+          });
+
+    //repeatUnitl 如果返回 true则不repeat false则repeat.主要用于动态控制
+
+      //Observable.just("22","ee","maliao").repeatUntil(new BooleanSupplier() {
+      //  @Override public boolean getAsBoolean() throws Exception {
+      //    return false;
+      //  }
+      //})
+
+
+      //https://blog.csdn.net/jackzhang_0522/article/details/77337086
+
+      //delay 延迟一段指定的时间再发射来自Observable的发射物
+      //注意：delay 不会平移 onError 通知，它会立即将这个通知传递给订阅者，同时丢弃任何待 发射的 onNext 通知。然而它会平移一个 onCompleted 通知
+
+
+// delaySubscription   让你可以延迟订阅原始Observable
+
+
+      //doOnEach  注册一个回调，它产生的Observable每发射一项数据就会调用它一次
+    Observable.range(0,3).doOnEach(new Consumer<Notification<Integer>>() {
+      @Override public void accept(Notification<Integer> integerNotification) throws Exception {
+
+      }
+    }).subscribe(new Consumer<Integer>() {
+      @Override public void accept(Integer integer) throws Exception {
+
+      }
+    });
+
+
+
+      //doOnNext
+      Observable.range(0,3).doOnNext(new Consumer<Integer>() {
+        @Override public void accept(Integer integer) throws Exception {
+
+        }
+      }).subscribe(new Consumer<Integer>() {
+        @Override public void accept(Integer integer) throws Exception {
+
+        }
+      });
+
+//doOnSubscribe  doOnComplete   doOnError   doOnTerminate  doFinally  doOnDispose
+
+
+      //timeInterval 一个发射数据的Observable转换为发射那些数据发射时间间隔的Observable  timeout
     }
+
+
+
+
 }

@@ -8,7 +8,9 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.PathDashPathEffect;
 import android.graphics.Shader;
+import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -33,11 +35,12 @@ public class MyTextView extends View {
     }
 
 
-    Paint textPaint;
+    TextPaint textPaint;
     Paint linePaint;
     private void initPaint(){
-        textPaint = new Paint();
+        textPaint = new TextPaint();
         textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setAntiAlias(true);
         textPaint.setTextSize(60);
         textPaint.setColor(getContext().getResources().getColor(R.color.textcolor));
@@ -58,7 +61,7 @@ public class MyTextView extends View {
 
     int baseX,baseY;
 
-    private static final String TEXT = "ap爱哥ξτβбпшㄎㄊ田";
+    private static final String TEXT = "ap爱哥ξτβбпшㄎㄊ田ap爱哥ξτβбпшㄎ";
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -85,4 +88,17 @@ public class MyTextView extends View {
         linePaint.setColor(getContext().getResources().getColor(R.color.color_pink));
         canvas.drawLine(0,getHeight()/2,getWidth(),getHeight()/2,linePaint);
     }
+
+    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        Log.i("ddddd", "onMeasure: "+getMeasuredWidth() +"   "+getMeasuredHeight());
+        int wdithmode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        Log.i("dddd", "onMeasure: "+wdithmode+ "      "+widthSize+"      "+heightMode+"         "+heightSize);
+    }
+
+
+
 }

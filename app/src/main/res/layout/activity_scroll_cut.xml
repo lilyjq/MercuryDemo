@@ -4,15 +4,94 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.mercury.demo.view.AnimationValueView
+
+
+
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:id="@+id/scroll_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
+
+<!--       <FrameLayout-->
+<!--           android:layout_width="wrap_content"-->
+<!--           android:layout_height="wrap_content">-->
+
+
+           <com.mercury.demo.scrollcut.TempRecyclerView
+               android:id="@+id/recyclerview"
+               android:layout_width="match_parent"
+               android:layout_height="600dp"
+               android:layout_marginTop="60dp"
+               app:layout_constraintTop_toTopOf="parent">
+
+           </com.mercury.demo.scrollcut.TempRecyclerView>
+
+
+    <View
         android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_pink"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/recyclerview"
+        app:layout_constraintBottom_toBottomOf="@id/recyclerview"/>
+
+<!--           <View-->
+<!--               android:layout_width="1000dp"-->
+<!--               android:layout_height="20dp"-->
+<!--               android:background="@android:color/holo_red_dark"/>-->
+
+
+
+<!--       </FrameLayout>-->
+
+<!--    </androidx.core.widget.NestedScrollView>-->
+
+
+    <HorizontalScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="60dp"
-        android:layout_marginTop="60dp"
         android:layout_marginBottom="60dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        android:visibility="gone">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/ll"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:orientation="horizontal">
+
+
+            </LinearLayout>
+            <com.mercury.demo.view.AnimationValueView
+                android:id="@+id/valueview"
+                android:layout_width="300dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_height="match_parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+    </HorizontalScrollView>
+
+
+
+
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,6 +129,7 @@
         android:layout_height="300dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/cltop"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -82,6 +162,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="200dp"
         android:layout_height="300dp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cltop"
@@ -102,6 +183,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:onClick="onClick"/>
+
+
+    <com.mercury.demo.scrollcut.LyricView
+        android:visibility="gone"
+        android:id="@+id/lyr"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="300dp"
+        android:layout_height="300dp"/>
 
 
 

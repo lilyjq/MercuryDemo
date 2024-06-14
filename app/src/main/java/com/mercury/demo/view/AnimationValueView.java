@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.NonNull;
@@ -51,11 +52,11 @@ public class AnimationValueView extends View {
   Paint  rightLinePaint;
   Paint  rightBallPaint;
 
-  int maxLength;
+  private int realLength;
+
 
   //float precent = 0f;
   //float rightPrecent = 0f;
-
 
 
 
@@ -97,15 +98,18 @@ public class AnimationValueView extends View {
     super.onDraw(canvas);
 
     //canvas.drawLine(30f, top, (getWidth()-30),bottom,defaultLinePaint);
-    canvas.drawLine(mStart,getHeight()/2,mEnd,getHeight()/2,defaultLinePaint);
+    canvas.drawLine(padding,getHeight()/2,rightLength,getHeight()/2,defaultLinePaint);
 
     if(rightScrollReady){
-      drawLeft(canvas);
+      //drawLeft(canvas);
       drawRight(canvas);
     }else{
       drawRight(canvas);
-      drawLeft(canvas);
+      //drawLeft(canvas);
     }
+
+
+
 
 
   }
@@ -113,38 +117,58 @@ public class AnimationValueView extends View {
   float offset = DisplayUtil.dp2px(1);
   private boolean lastIsLeft ;
   private void drawLeft(Canvas canvas){
-    canvas.drawLine(mStart,getHeight()/2f,leftLength-offset,getHeight()/2f,leftLinePaint);
-    canvas.drawCircle(leftLength-offset,getHeight()/2f,30,leftBallPaint);
+    //canvas.drawLine(mStart,getHeight()/2f,leftLength-offset,getHeight()/2f,leftLinePaint);
+    canvas.drawCircle(padding,getHeight()/2f,30,leftBallPaint);
   }
 
   private void drawRight(Canvas canvas){
-    canvas.drawLine(mEnd,getHeight()/2.f,rightLength+offset,getHeight()/2f,rightLinePaint);
-    canvas.drawCircle(rightLength+offset,getHeight()/2f,30,rightBallPaint);
+    //canvas.drawLine(mEnd,getHeight()/2.f,rightLength+offset,getHeight()/2f,rightLinePaint);
+    canvas.drawCircle(rightLength,getHeight()/2f,30,rightBallPaint);
   }
 
 
 
   @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    mEnd = getMeasuredWidth()-padding;
-    maxLength = getWidth()-200;
+    mEnd = getContext().getResources().getDisplayMetrics().widthPixels-padding;
+
+    final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+    final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+    final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+    final int heightSize = MeasureSpec.getSize(widthMeasureSpec);
+    int hopeWidthMeasureSpec = MeasureSpec.makeMeasureSpec(widthSize,widthMode);
+    int hopeHeightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize,heightMode);
+    if(hopeWidth>0){
+      hopeWidthMeasureSpec = hopeWidth;
+    }
+    setMeasuredDimension(hopeWidthMeasureSpec,hopeHeightMeasureSpec);
+
+
     if(rightLength == 0){
-      rightLength = (int) mEnd;
+      rightLength = hopeWidth;
+      mRightPos = hopeWidth;
     }
 
   }
 
-  float padding = DisplayUtil.dp2px(16);
+  float padding = DisplayUtil.dp2px(40);
 
 
   int leftLength = (int) padding;
   int rightLength = 0;
 
   float mStart = padding;
+
   float mEnd;
+
+
+  float mLeftPos = padding;
+  float mRightPos;
 
   boolean leftScrollReady;
   boolean rightScrollReady;
+
+  private int lastX;
 
   @Override public boolean onTouchEvent(MotionEvent event) {
     super.onTouchEvent(event);
@@ -169,6 +193,9 @@ public class AnimationValueView extends View {
          }else if(downY && rightX){
            rightScrollReady = true;
            lastIsLeft = false;
+           lastX = (int) x;
+         }else{
+           return false;
          }
 
         break;
@@ -176,14 +203,35 @@ public class AnimationValueView extends View {
          if(leftScrollReady){
            if( x <=rightLength && x>=mStart){
                leftLength = (int) x;
+               lastX = (int) x;
                postInvalidate();
            }
 
          }else if(rightScrollReady){
-            if(x>=leftLength && x<mEnd){
-              rightLength = (int) x;
-              postInvalidate();
-            }
+            if(x>=leftLength && x<mEnd ){
+              rightLength = (int) ((int) rightLength -(lastX-x));
+              lastX = (int) x;
+              //加一个误差
+            }else if(x>= leftLength && x>mEnd+DisplayUtil.dp2px(5)){
+              if(callback!= null){
+                callback.onScroll((int) (getMeasuredWidth()-x));
+              }
+              rightLength = (int) (rightLength+lastX-x);
+
+              lastX = (int) x;
+              //leftLength = (int) (leftLength +(x-getMeasuredWidth()));
+            }else if(x>= leftLength  && x<=mStart+DisplayUtil.dp2px(5)) {
+
+              //int tmp = leftLength- ((int) x - getMeasuredWidth());
+
+              //if(tmp > mStart){
+                if (callback != null) {
+                  callback.onScroll((int) x - getMeasuredWidth());
+                }
+                //leftLength = tmp;
+              }
+            //}
+            postInvalidate();
          }
         break;
 
@@ -200,7 +248,27 @@ public class AnimationValueView extends View {
   }
 
 
+  public onScrollCallback callback;
 
+  public void setCallback(onScrollCallback callback) {
+    this.callback = callback;
+  }
+
+ int  recyclerViewleft = 0;
+  public void setRecyclerLeft(int left){
+    //leftLength = (int) (recyclerViewleft+padding);
+    //postInvalidate();
+  }
+
+ public interface onScrollCallback{
+    void onScroll (int x);
+  }
+
+
+  int hopeWidth = (int) DisplayUtil.dp2px(300);
+  public  void setHopeWidth(int hopeWidth){
+    this.hopeWidth = hopeWidth;
+  }
 
 
 }

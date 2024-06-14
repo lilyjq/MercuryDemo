@@ -15,9 +15,11 @@ import androidx.core.view.ViewCompat;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 public class ImageBtnBehavior extends CoordinatorLayout.Behavior<View> {
-    private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
+     static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
     private float viewY;//控件距离coordniatorLayout底部的距离
     private boolean isAnimate;//动画是否正在进行
+
+
 
 
 
@@ -48,18 +50,25 @@ public class ImageBtnBehavior extends CoordinatorLayout.Behavior<View> {
     public void onNestedPreScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull View child, @NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
 //        Log.e("aaa","onNestedPreScroll : dy      "+dy+"        isAnimate:         "+isAnimate+"         childviesible:       " +(child.getVisibility()==View.VISIBLE));
         if(dy>0 && !isAnimate && child.getVisibility() == View.VISIBLE){
-//            hide(child);
-            hideRight(child);
-        }else if(dy<0 && !isAnimate&& child.getVisibility() == View.INVISIBLE){
-//            show(child);
-            showLeft(child);
+            hide(child);
+            //hideRight(child);
+        }else if(dy<0 && !isAnimate && child.getVisibility() == View.INVISIBLE){
+            show(child);
+            //showLeft(child);
         }
 //        super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type);
 
     }
 
+    @Override
+    public void onStopNestedScroll(@NonNull CoordinatorLayout coordinatorLayout,
+        @NonNull View child,
+        @NonNull View target, int type) {
+        super.onStopNestedScroll(coordinatorLayout, child, target, type);
+    }
+
     private void hide(final View view){
-        ViewPropertyAnimator animator = view.animate().translationY(viewY).setInterpolator(INTERPOLATOR).setDuration(200);
+        ViewPropertyAnimator animator = view.animate().translationY(-viewY).setInterpolator(INTERPOLATOR).setDuration(200);
         animator.setListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -68,7 +77,7 @@ public class ImageBtnBehavior extends CoordinatorLayout.Behavior<View> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                view.setVisibility(View.INVISIBLE);
+                //view.setVisibility(View.INVISIBLE);
                 isAnimate = false;
             }
 

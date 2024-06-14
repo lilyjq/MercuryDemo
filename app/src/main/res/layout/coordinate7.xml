@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mercury.demo.behavior.LinearCoordinateLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+
+
+
+    <TextView
+        android:id="@+id/tv_top"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/color_pink"
+        android:text="@string/text_long"
+        app:layout_constraintTop_toTopOf="parent"
+        app:custom_layout_behavior = "com.mercury.demo.behavior.TopBehavior"
+
+        />
+
+
+    <TextView
+        android:id="@+id/tv_center"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/color_yellow"
+        android:text="@string/text_long"
+        app:layout_constraintTop_toBottomOf="@+id/tv_top"
+        />
+
+
+
+    <TextView
+        android:id="@+id/tv_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/color_one"
+        android:text="@string/text_long"
+        app:layout_constraintTop_toBottomOf="@+id/tv_center"
+        app:custom_layout_behavior = "com.mercury.demo.behavior.TopBehavior"
+        />
+
+
+
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+
+
+
+
+</com.mercury.demo.behavior.LinearCoordinateLayout>

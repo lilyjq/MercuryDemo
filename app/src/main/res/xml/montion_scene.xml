@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:motion="http://schemas.android.com/tools">
+
+  <ConstraintSet android:id="@+id/start">
+
+<!--
+    <Constraint
+        android:id="@id/tv_top"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:alpha="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+
+    <Constraint
+        android:id="@+id/tv_center"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_top" />
+
+
+    <Constraint
+        android:id="@+id/tv_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:alpha="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_center" />
+
+
+  </ConstraintSet>
+
+  <ConstraintSet android:id="@+id/end">
+   <!-- <Constraint
+        android:id="@id/tv_top"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:alpha="0"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+
+    <Constraint
+        android:id="@+id/tv_center"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_top" />
+
+
+    <Constraint
+        android:id="@+id/tv_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:alpha="0"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_center" />
+
+
+
+
+  </ConstraintSet>
+
+  <Transition
+      app:constraintSetEnd="@id/end"
+      app:constraintSetStart="@+id/start"
+      app:duration="2000"
+      app:motionInterpolator="linear">
+
+    <OnSwipe
+        app:touchAnchorSide="bottom"
+        motion:dragDirection="dragUp"
+        motion:touchAnchorId="@id/tv_top" />
+  </Transition>
+</MotionScene>
